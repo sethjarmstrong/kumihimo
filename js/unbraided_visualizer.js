@@ -1,23 +1,5 @@
-class UnbraidedVisualizer {
-  constructor(braid, element) {
-    this.braid = braid;
-    this.element = element;
-    this.px_per_bead = 20;
-  }
-
-  render() {
-    this.clean_element();
-
-    var svgs = this.braid_svg();
-    var element = this.element;
-    element.setAttribute('style', 'height: ' + this.height());
-
-    svgs.forEach(function(svg) {
-      element.appendChild(svg);
-    });
-  }
-
-  braid_svg() {
+class UnbraidedVisualizer extends Visualizer {
+  svgs() {
     var elements = [];
 
     var column_width = 100 / this.braid.threads.length;
@@ -68,15 +50,5 @@ class UnbraidedVisualizer {
     circle.setAttribute('stroke-width', 1);
     circle.setAttribute('fill', bead.colour);
     return circle;
-  }
-
-  clean_element() {
-    while (this.element.firstChild) {
-      this.element.removeChild(this.element.firstChild);
-    }
-  }
-
-  height() {
-    return (this.braid.numBeads * this.px_per_bead) + 'px';
   }
 }
