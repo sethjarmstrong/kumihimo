@@ -6,16 +6,36 @@
     <link rel="stylesheet" type="text/css" href="css/kumihimo.css">
     <script type="application/javascript" src="js/three.js"></script>
     <script type="application/javascript" src="js/kumihimo.js"></script>
+    <script type="application/javascript" src="js/loom.js"></script>
     <script type="application/javascript" src="js/visualizer.js"></script>
     <script type="application/javascript" src="js/unbraided_visualizer.js"></script>
+    <script type="application/javascript" src="js/braided_visualizer.js"></script>
+    <script type="application/javascript" src="js/visualizer_manager.js"></script>
   </head>
   <body class="grid-container">
     <div class="controls">
-      <svg id="unbraided"></svg>
+      <div>
+        <button type="button" id="remove_threads">Remove Threads</button>
+        <button type="button" id="add_threads">Add Threads</button>
+      </div>
+
+      <div>
+        <label for="bead_number">Number of Beads</label>
+        <input id="bead_number" type="number" min="1" value="40" />
+      </div>
+
+      <div>
+        <label for="bead_colour">Bead Colour</label>
+        <input id="bead_colour" type="color" value="#ffffff" />
+      </div>
     </div>
-    <div class="controls">
+
+    <div class="visualization">
       <svg id="braided"></svg>
     </div>
-    <div class="visualization"></div>
+
+    <div class="visualization">
+      <svg id="unbraided"></svg>
+    </div>
   </body>
 </html>

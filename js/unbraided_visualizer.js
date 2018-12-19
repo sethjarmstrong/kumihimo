@@ -1,4 +1,12 @@
 class UnbraidedVisualizer extends Visualizer {
+  get rows() {
+    return this.braid.numBeads;
+  }
+
+  get columns() {
+    return this.braid.numThreads;
+  }
+
   svgs() {
     var elements = [];
 
@@ -9,9 +17,9 @@ class UnbraidedVisualizer extends Visualizer {
       var x = (column_width * i + column_mid) + '%';
       var thread_svgs = this.thread_svg(this.braid.threads[i], x);
 
-      for (var j = 0; j < thread_svgs.length; j++) {
-        elements.push(thread_svgs[j]);
-      }
+      thread_svgs.forEach(function(svg) {
+        elements.push(svg);
+      });
     }
 
     return elements;
@@ -29,26 +37,14 @@ class UnbraidedVisualizer extends Visualizer {
     line.setAttribute('stroke-width', '3');
     elements.push(line);
 
-    var segment_length = 100 / thread.beads.length;
+    var segment_length = 100 / this.rows;
     var segment_mid = segment_length / 2;
 
     for (var i = 0; i < thread.beads.length; i++) {
       var y = (segment_length * i + segment_mid) + '%';
-      var r = 8;
-      elements.push(this.bead_svg(thread.beads[i], x, y, r));
+      elements.push(this.bead_svg(thread.beads[i], x, y));
     }
 
     return elements;
-  }
-
-  bead_svg(bead, x, y, r) {
-    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', x);
-    circle.setAttribute('cy', y);
-    circle.setAttribute('r', r);
-    circle.setAttribute('stroke', 'black');
-    circle.setAttribute('stroke-width', 1);
-    circle.setAttribute('fill', bead.colour);
-    return circle;
   }
 }
