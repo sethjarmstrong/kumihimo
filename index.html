@@ -11,6 +11,8 @@
     <script type="application/javascript" src="js/unbraided_visualizer.js"></script>
     <script type="application/javascript" src="js/braided_visualizer.js"></script>
     <script type="application/javascript" src="js/stringing_visualizer.js"></script>
+    <script type="application/javascript" src="js/OrbitControls.js"></script>
+    <script type="application/javascript" src="js/three_d_visualizer.js"></script>
     <script type="application/javascript" src="js/visualizer_manager.js"></script>
   </head>
   <body class="grid-container">
@@ -30,15 +32,11 @@
         <input id="bead_colour" type="color" value="#ffffff" />
       </div>
 
-      <div id="stringing_guide">
-
-      </div>
+      <div class="visualization" id="stringing_guide"></div>
     </div>
 
-    <div class="visualization" id="braided">
-    </div>
-
-    <div class="visualization" id="unbraided">
-    </div>
+    <div class="visualization" id="braided"></div>
+    <div class="visualization" id="three_d"></div>
+    <div class="visualization" id="unbraided"></div>
   </body>
 </html>
