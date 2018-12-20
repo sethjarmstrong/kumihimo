@@ -18,5 +18,19 @@ svg {
     height: 100vh;
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 3fr;
+}
+
+td {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+}
+
+.left {
+    float: left;
+}
+
+.stringing_row {
+    clear: left;
 }

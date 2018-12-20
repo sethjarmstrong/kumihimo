@@ -11,13 +11,16 @@ class Visualizer {
     this.bead_svgs = [];
     this.clean_element();
 
-    var svgs = this.svgs();
-    var element = this.element;
-    element.setAttribute('style', 'height: ' + this.height + '; ' + 'width: ' + this.width);
+    this.element.setAttribute('style', this.style());
 
-    svgs.forEach(function(svg) {
-      element.appendChild(svg);
+    var element = this.element;
+    this.elements().forEach(function(e) {
+      element.appendChild(e);
     });
+  }
+
+  style() {
+    return 'style', 'height: ' + this.height + '; ' + 'width: ' + this.width;
   }
 
   clean_element() {
@@ -40,6 +43,18 @@ class Visualizer {
 
   get columns() {
     return 0;
+  }
+
+  elements() {
+    var svg_element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg_element.setAttribute('style', 'height: ' + this.height + '; ' + 'width: ' + this.width);
+    var svgs = this.svgs();
+
+    svgs.forEach(function(svg) {
+      svg_element.appendChild(svg);
+    });
+
+    return [svg_element];
   }
 
   svgs() {

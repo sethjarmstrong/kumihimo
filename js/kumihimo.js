@@ -87,6 +87,8 @@ function init() {
 
   var unv = new UnbraidedVisualizer(braid, document.getElementById('unbraided'));
   var brv = new BraidedVisualizer(braid, document.getElementById('braided'));
+  var stv = new StringingVisualizer(braid, document.getElementById('stringing_guide'));
+
   var manager = new VisualizerManager(
     braid,
     document.getElementById('add_threads'),
@@ -94,8 +96,11 @@ function init() {
     document.getElementById('bead_number'),
     document.getElementById('bead_colour')
   );
+
   manager.register_visualizer(unv);
   manager.register_visualizer(brv);
+  manager.register_visualizer(stv);
+
   manager.render();
 }
 

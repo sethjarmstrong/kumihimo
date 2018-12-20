@@ -10,6 +10,7 @@
     <script type="application/javascript" src="js/visualizer.js"></script>
     <script type="application/javascript" src="js/unbraided_visualizer.js"></script>
     <script type="application/javascript" src="js/braided_visualizer.js"></script>
+    <script type="application/javascript" src="js/stringing_visualizer.js"></script>
     <script type="application/javascript" src="js/visualizer_manager.js"></script>
   </head>
   <body class="grid-container">
@@ -28,14 +29,16 @@
         <label for="bead_colour">Bead Colour</label>
         <input id="bead_colour" type="color" value="#ffffff" />
       </div>
+
+      <div id="stringing_guide">
+
+      </div>
     </div>
 
-    <div class="visualization">
-      <svg id="braided"></svg>
+    <div class="visualization" id="braided">
     </div>
 
-    <div class="visualization">
-      <svg id="unbraided"></svg>
+    <div class="visualization" id="unbraided">
     </div>
   </body>
 </html>

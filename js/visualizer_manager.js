@@ -15,7 +15,7 @@ class VisualizerManager {
   setup_add_threads_listener() {
     var this_  = this;
     this.add_threads_element.addEventListener('click', function() {
-      if (this_.braid.numThreads <= 24) {
+      if (this_.braid.numThreads <= 28) {
         this_.braid.add_threads(4);
       }
       this_.render();
@@ -54,7 +54,19 @@ class VisualizerManager {
   add_listeners(visualizer) {
     var this_ = this;
     visualizer.bead_svgs.forEach(function(bead_svg) {
-      bead_svg.element.addEventListener('click', function() {
+      bead_svg.element.addEventListener('mousemove', function(event) {
+        /*
+          The left mouse button is depressed if the rightmost bit is 1.
+          Mask the buttons attribute with 0001 to flip all of the irrelevant
+          bits first, and then we can just check to see if the result is 1.
+         */
+        if (event.buttons & 1 === 1) {
+          bead_svg.bead.colour = this_.colour_picker_element.value;
+          this_.render();
+        }
+      });
+
+      bead_svg.element.addEventListener('click', function(event) {
         bead_svg.bead.colour = this_.colour_picker_element.value;
         this_.render();
       });
