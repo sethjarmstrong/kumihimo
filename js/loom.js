@@ -73,7 +73,7 @@ class Loom {
     bead.thread = thread;
     this.current_bead_row[bead_index] = bead;
     var threads_to_pass_over = (this.threads.length - 4) / 2;
-    var thread = this.threads[thread_index];
+    thread = this.threads[thread_index];
 
     for (var i = 0; i < threads_to_pass_over; i++) {
       var next_index = (thread_index + 1) % this.number_of_threads;
