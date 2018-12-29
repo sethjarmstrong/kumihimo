@@ -68,7 +68,7 @@ class Loom {
   }
 
   weave_thread(thread_index, bead_index) {
-    var thread = this.threads[thread_index]
+    var thread = this.threads[thread_index];
     var bead = thread.next_bead();
     bead.thread = thread;
     this.current_bead_row[bead_index] = bead;
