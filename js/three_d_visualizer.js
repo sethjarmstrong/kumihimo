@@ -22,11 +22,7 @@ class ThreeDVisualizer extends Visualizer {
 
       for (var i = 0; i < this.loom.beads.length; i++) {
         var row = this.loom.beads[i];
-        var angle_offset = 0;
-
-        if (i % 2 === 1) {
-          angle_offset = this.bead_angle(1) / 2;
-        }
+        var angle_offset = this.bead_angle(1) / 2 * (i % this.beads_per_row);
 
         for (var j = 0; j < row.length; j++) {
           var x = xorigin + this.weave_radius * Math.cos(this.bead_angle(j) + angle_offset);
