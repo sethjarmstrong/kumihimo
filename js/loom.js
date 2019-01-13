@@ -1,38 +1,18 @@
-class Grouping {
+// String 0, its opposite
+// String 7, its opposite
+// String 2, its opposite
+// String 1, its opposite
+
+class Group {
   constructor(threads) {
     this.threads = threads;
+    this.index = 0;
   }
 
-  get next_thread() {
-    return this.threads.pop();
-  }
-
-  add_thread(thread) {
-    this.threads.unshift(thread);
-  }
-}
-
-class Pair {
-  constructor(active_grouping, opposite_grouping) {
-    this.active_grouping = active_grouping;
-    this.opposite_grouping = opposite_grouping;
-  }
-
-  move_threads() {
-    // Physically move the threads.
-    var active_thread = this.active_grouping.next_thread;
-    var opposite_thread = this.opposite_grouping.next_thread;
-    this.opposite_grouping.add_thread(active_thread);
-    this.active_grouping.add_thread(opposite_thread);
-
-    // Swap which thread is the active.
-    var temp = this.active_grouping;
-    this.active_grouping = this.opposite_grouping;
-    this.opposite_grouping = temp;
-
-    // Get the beads which should be put on the braid next.
-    var beads = [active_thread.next_bead(), opposite_thread.next_bead()];
-    return beads;
+  get next_bead() {
+    var thread = this.threads[this.index];
+    this.index = (this.index + 1) % this.threads.length;
+    return thread.next_bead();
   }
 }
 
@@ -43,11 +23,6 @@ class Loom {
 
   opposite_thread_index(thread_index) {
     return (thread_index + this.number_of_threads / 2) % this.number_of_threads;
-  }
-
-  get opposite_bead_index() {
-    var beads_to_skip_over = (this.braid.threads.length - 4) / 4;
-    return this.current_bead_index + beads_to_skip_over + 1;
   }
 
   get number_of_threads() {
@@ -87,22 +62,25 @@ class Loom {
     this.braid.reset_beading();
 
     var threads = this.braid.threads;
-    this.pairs = [];
+    this.groups = [];
 
-    for (var i = 0; i < threads.length / 2; i += 2) {
+    for (var i = 0; i < threads.length; i += 2) {
       var prior_index = this.normalize_thread_index(i - 1);
-      this.pairs.push(
-        new Pair(
-          new Grouping([threads[prior_index], threads[i]]),
-          new Grouping([threads[this.opposite_thread_index(prior_index)], threads[this.opposite_thread_index(i)]])
+
+      this.groups.push(
+        new Group(
+          [
+            threads[i],
+            threads[prior_index],
+            threads[this.opposite_thread_index(i)],
+            threads[this.opposite_thread_index(prior_index)]
+          ]
         )
       );
     }
 
-    this.current_pair_index = 0;
     this.beads = [[]];
     this.current_row_index = 0;
-    this.current_bead_index = 0;
 
     while(this.woven_beads < this.total_beads) {
       this.step();
@@ -114,16 +92,12 @@ class Loom {
       this.create_row();
     }
 
-    var beads = this.pairs[this.current_pair_index].move_threads();
-    this.current_bead_row[this.current_bead_index] = beads[0];
-    this.current_bead_row[this.opposite_bead_index] = beads[1];
-
-    this.current_pair_index = (this.current_pair_index + 1) % this.pairs.length;
-    this.current_bead_index++;
+    for (var i = 0; i < this.groups.length; i++) {
+      this.current_bead_row.push(this.groups[i].next_bead);
+    }
   }
 
   create_row() {
     this.beads[++this.current_row_index] = [];
-    this.current_bead_index = 0;
   }
 }
