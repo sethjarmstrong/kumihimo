@@ -29,7 +29,7 @@ class BraidedVisualizer extends Visualizer {
 
     for (var i = 0; i < this.loom.beads.length; i++) {
       var y = (row_width * i + row_mid) + '%';
-      var row_svgs = this.row_svg(this.loom.beads[i], y, i % 2 === 1);
+      var row_svgs = this.row_svg(this.loom.beads[i], y, i % 2 === 0);
 
       row_svgs.forEach(function(svg) {
         elements.push(svg);
