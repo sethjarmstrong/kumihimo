@@ -16,6 +16,13 @@ class BraidedVisualizer extends Visualizer {
     return ((this.columns + 0.5) * this.px_per_bead) + 'px';
   }
 
+  wrap_beads(beads, beads_to_wrap) {
+    for (var i = 0; i < beads_to_wrap; i++) {
+      beads.push(beads.shift());
+    }
+    return beads;
+  }
+
   render() {
     this.loom.weave();
     super.render();
@@ -26,14 +33,20 @@ class BraidedVisualizer extends Visualizer {
 
     var row_width = 100 / this.rows;
     var row_mid = row_width / 2;
+    var beads_to_wrap = 0;
 
     for (var i = 0; i < this.loom.beads.length; i++) {
       var y = (row_width * i + row_mid) + '%';
-      var row_svgs = this.row_svg(this.loom.beads[i], y, i % 2 === 0);
+      var row = this.wrap_beads(this.loom.beads[i], beads_to_wrap);
+      var row_svgs = this.row_svg(row, y, i % 2 === 0);
 
       row_svgs.forEach(function(svg) {
         elements.push(svg);
       });
+
+      if (i % 2 === 1) {
+        beads_to_wrap = (beads_to_wrap + 1) % this.beads_per_row;
+      }
     }
 
     return elements;
