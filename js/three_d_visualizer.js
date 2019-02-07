@@ -44,10 +44,6 @@ class ThreeDVisualizer extends Visualizer {
     }
   }
 
-  get beads_per_row() {
-    return this.braid.numThreads / 2;
-  }
-
   get weave_radius() {
     /*
       The circumference of the bead circle is equal to the sum of the diameters

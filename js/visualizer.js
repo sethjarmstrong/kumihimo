@@ -45,6 +45,10 @@ class Visualizer {
     return 0;
   }
 
+  get beads_per_row() {
+    return this.braid.numThreads / 2;
+  }
+
   elements() {
     var svg_element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg_element.setAttribute('style', 'height: ' + this.height + '; ' + 'width: ' + this.width);
