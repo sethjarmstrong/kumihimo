@@ -82,7 +82,19 @@ class Braid {
   }
 }
 
-function init() {
+function get_colour_name() {
+  var element = document.getElementById('colour_name');
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+
+  var colour_value = document.getElementById('bead_colour').value;
+  var colour_name = ntc.name(colour_value).name;
+  var colour_text_node = document.createTextNode(colour_name);
+  element.appendChild(colour_text_node);
+}
+
+function init_visualizations() {
   var braid = new Braid(12, 40);
 
   var unv = new UnbraidedVisualizer(braid, document.getElementById('unbraided'));
@@ -104,6 +116,16 @@ function init() {
   manager.register_visualizer(tdv);
 
   manager.render();
+}
+
+function init_colour_picker() {
+  document.getElementById('bead_colour').addEventListener('change', get_colour_name);
+  get_colour_name();
+}
+
+function init() {
+  init_visualizations();
+  init_colour_picker();
 }
 
 window.addEventListener('load', init);
