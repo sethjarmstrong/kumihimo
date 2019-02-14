@@ -23,30 +23,32 @@
     <script type="application/javascript" src="js/three_d_visualizer.js"></script>
     <script type="application/javascript" src="js/visualizer_manager.js"></script>
   </head>
-  <body class="grid-container">
-    <div class="controls">
-      <div>
-        <button type="button" id="remove_threads">Remove Threads</button>
-        <button type="button" id="add_threads">Add Threads</button>
+  <body>
+    <div class="grid-container">
+      <div class="controls">
+        <div>
+          <button type="button" id="remove_threads">Remove Threads</button>
+          <button type="button" id="add_threads">Add Threads</button>
+        </div>
+
+        <div>
+          <label for="bead_number">Number of Beads</label>
+          <input id="bead_number" type="number" min="1" value="40" />
+        </div>
+
+        <div>
+          <label for="bead_colour" class="left">Bead Colour</label>
+          <input id="bead_colour" type="color" value="#ffffff" class="left" />
+          <div id="colour_name"></div>
+        </div>
+
+        <div class="visualization" id="stringing_guide"></div>
+        <div class="visualization" id="printable_stringing_guide"></div>
       </div>
 
-      <div>
-        <label for="bead_number">Number of Beads</label>
-        <input id="bead_number" type="number" min="1" value="40" />
-      </div>
-
-      <div>
-        <label for="bead_colour" class="left">Bead Colour</label>
-        <input id="bead_colour" type="color" value="#ffffff" class="left" />
-        <div id="colour_name"></div>
-      </div>
-
-      <div class="visualization" id="stringing_guide"></div>
-      <div class="visualization" id="printable_stringing_guide"></div>
+      <div class="visualization" id="braided"></div>
+      <div class="visualization" id="three_d"></div>
+      <div class="visualization" id="unbraided"></div>
     </div>
-
-    <div class="visualization" id="braided"></div>
-    <div class="visualization" id="three_d"></div>
-    <div class="visualization" id="unbraided"></div>
   </body>
 </html>
