@@ -11,14 +11,17 @@ class StringingVisualizer extends Visualizer {
     return elements;
   }
 
-  thread_element(thread, number) {
+  create_container(thread_number) {
     var container = document.createElement('div');
     container.setAttribute('class', 'stringing_row');
     var label = document.createElement('div');
-    label.appendChild(document.createTextNode('String ' + number + ':'));
+    label.appendChild(document.createTextNode('String ' + thread_number + ':'));
     label.setAttribute('class', 'left');
     container.appendChild(label);
+    return container;
+  }
 
+  group_colours(thread) {
     var colours = [];
     for (var i = 0; i < thread.beads.length; i++) {
       var bead = thread.beads[i];
@@ -28,14 +31,27 @@ class StringingVisualizer extends Visualizer {
         colours[colours.length - 1].count++;
       }
     }
+    return colours;
+  }
+
+  create_colour_descriptor(colour, last_colour) {
+    var colour_descriptor = document.createElement('div');
+    colour_descriptor.appendChild(this.bead_svg(colour.bead));
+
+    var count_indicator = document.createElement('div');
+    count_indicator.appendChild(document.createTextNode('x' + colour.count));
+    count_indicator.setAttribute('class', 'left');
+    colour_descriptor.appendChild(count_indicator);
+
+    return colour_descriptor;
+  }
+
+  thread_element(thread, number) {
+    var container = this.create_container(number);
+    var colours = this.group_colours(thread);
 
     for (var i = 0; i < colours.length; i++) {
-      var colour = colours[i];
-      container.appendChild(this.bead_svg(colour.bead));
-      var count_indicator = document.createElement('div');
-      count_indicator.appendChild(document.createTextNode('x' + colour.count));
-      count_indicator.setAttribute('class', 'left');
-      container.appendChild(count_indicator);
+      container.appendChild(this.create_colour_descriptor(colours[i], i === colours.length - 1));
     }
 
     return container;
