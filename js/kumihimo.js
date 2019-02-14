@@ -97,11 +97,6 @@ function get_colour_name() {
 function init_visualizations() {
   var braid = new Braid(12, 40);
 
-  var unv = new UnbraidedVisualizer(braid, document.getElementById('unbraided'));
-  var brv = new BraidedVisualizer(braid, document.getElementById('braided'));
-  var stv = new StringingVisualizer(braid, document.getElementById('stringing_guide'));
-  var tdv = new ThreeDVisualizer(braid, document.getElementById('three_d'));
-
   var manager = new VisualizerManager(
     braid,
     document.getElementById('add_threads'),
@@ -110,10 +105,17 @@ function init_visualizations() {
     document.getElementById('bead_colour')
   );
 
-  manager.register_visualizer(unv);
-  manager.register_visualizer(brv);
-  manager.register_visualizer(stv);
-  manager.register_visualizer(tdv);
+  var visualizers = [
+    new UnbraidedVisualizer(braid, document.getElementById('unbraided')),
+    new BraidedVisualizer(braid, document.getElementById('braided')),
+    new StringingVisualizer(braid, document.getElementById('stringing_guide')),
+    new PrintableStringingVisualizer(braid, document.getElementById('printable_stringing_guide')),
+    new ThreeDVisualizer(braid, document.getElementById('three_d')),
+  ];
+
+  for (var i = 0; i < visualizers.length; i++) {
+    manager.register_visualizer(visualizers[i]);
+  }
 
   manager.render();
 }
