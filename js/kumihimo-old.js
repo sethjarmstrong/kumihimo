@@ -82,52 +82,54 @@ class Braid {
   }
 }
 
-function get_colour_name() {
-  var element = document.getElementById('colour_name');
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
+(function() {
+  function get_colour_name() {
+    var element = document.getElementById('colour_name');
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+
+    var colour_value = document.getElementById('bead_colour').value;
+    var colour_name = ntc.name(colour_value).name;
+    var colour_text_node = document.createTextNode(colour_name);
+    element.appendChild(colour_text_node);
   }
 
-  var colour_value = document.getElementById('bead_colour').value;
-  var colour_name = ntc.name(colour_value).name;
-  var colour_text_node = document.createTextNode(colour_name);
-  element.appendChild(colour_text_node);
-}
+  function init_visualizations() {
+    var braid = new Braid(12, 40);
 
-function init_visualizations() {
-  var braid = new Braid(12, 40);
+    var manager = new VisualizerManager(
+      braid,
+      document.getElementById('add_threads'),
+      document.getElementById('remove_threads'),
+      document.getElementById('bead_number'),
+      document.getElementById('bead_colour')
+    );
 
-  var manager = new VisualizerManager(
-    braid,
-    document.getElementById('add_threads'),
-    document.getElementById('remove_threads'),
-    document.getElementById('bead_number'),
-    document.getElementById('bead_colour')
-  );
+    var visualizers = [
+      new UnbraidedVisualizer(braid, document.getElementById('unbraided')),
+      new BraidedVisualizer(braid, document.getElementById('braided')),
+      new StringingVisualizer(braid, document.getElementById('stringing_guide')),
+      new PrintableStringingVisualizer(braid, document.getElementById('printable_stringing_guide')),
+      new ThreeDVisualizer(braid, document.getElementById('three_d')),
+    ];
 
-  var visualizers = [
-    new UnbraidedVisualizer(braid, document.getElementById('unbraided')),
-    new BraidedVisualizer(braid, document.getElementById('braided')),
-    new StringingVisualizer(braid, document.getElementById('stringing_guide')),
-    new PrintableStringingVisualizer(braid, document.getElementById('printable_stringing_guide')),
-    new ThreeDVisualizer(braid, document.getElementById('three_d')),
-  ];
+    for (var i = 0; i < visualizers.length; i++) {
+      manager.register_visualizer(visualizers[i]);
+    }
 
-  for (var i = 0; i < visualizers.length; i++) {
-    manager.register_visualizer(visualizers[i]);
+    manager.render();
   }
 
-  manager.render();
-}
+  function init_colour_picker() {
+    document.getElementById('bead_colour').addEventListener('change', get_colour_name);
+    get_colour_name();
+  }
 
-function init_colour_picker() {
-  document.getElementById('bead_colour').addEventListener('change', get_colour_name);
-  get_colour_name();
-}
+  function init() {
+    init_visualizations();
+    init_colour_picker();
+  }
 
-function init() {
-  init_visualizations();
-  init_colour_picker();
-}
-
-window.addEventListener('load', init);
+  window.addEventListener('load', init);
+})();
