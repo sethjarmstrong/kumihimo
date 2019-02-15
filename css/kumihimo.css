@@ -8,16 +8,6 @@ svg {
     height: 100%;
 }
 
-.grid-container {
-    margin: 0;
-    background-color: #f0f0f0;
-    width: 100vw;
-    height: 100vh;
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 2fr 1fr 1fr 3fr;
-}
-
 td {
     text-align: center;
     width: 20px;
@@ -32,6 +22,66 @@ td {
     clear: left;
 }
 
-#three_d {
-    height: 100vh;
+h2 {
+    font: 14px Arial, sans-serif;
+    color:#777;
+    padding: 10px;
+    text-align: center;
+}
+
+html, body {
+    height: 100%;
+}
+
+body .lm_content {
+    overflow: scroll;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style-type:none;
+}
+
+#layout-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#menu-container {
+    width: 20%;
+    height: 100%;
+    position:absolute;
+    top: 0;
+    left: 0;
+    background: #fafafa;
+}
+
+#menu-container li {
+    border-bottom: 1px solid #CCC;
+    border-top: 1px solid #CCC;
+    padding: 10px 5px;
+    color: #777;
+    background: #e1e1e1;
+    font: 12px Arial, sans-serif;
+}
+
+#menu-container li.component {
+    cursor: move;
+    cursor: pointer;
+}
+
+#menu-container li.component:hover {
+    background: #bbbbbb;
+
+}
+
+#layout-container {
+    width: 80%;
+    height: 100%;
+    position:absolute;
+    top: 0;
+    left: 20%;
+    box-shadow: -3px 0px 9px 0px rgba( 0, 0, 0, 0.4 );
 }

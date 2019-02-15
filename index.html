@@ -6,13 +6,14 @@
 
     <link rel="stylesheet" type="text/css" href="css/kumihimo.css">
     <link rel="stylesheet" type="text/css" href="css/goldenlayout-base.css">
+    <link rel="stylesheet" type="text/css" href="css/goldenlayout-light-theme.css">
 
     <script type="application/javascript" src="js/jquery-3.3.1.slim.min.js"></script>
     <script type="application/javascript" src="js/goldenlayout.min.js"></script>
 
     <script type="application/javascript" src="js/three.js"></script>
     <script type="application/javascript" src="js/ntc.js"></script>
-    <script type="application/javascript" src="js/kumihimo-old.js"></script>
+    <script type="application/javascript" src="js/kumihimo.js"></script>
     <script type="application/javascript" src="js/loom.js"></script>
     <script type="application/javascript" src="js/visualizer.js"></script>
     <script type="application/javascript" src="js/unbraided_visualizer.js"></script>
@@ -24,31 +25,26 @@
     <script type="application/javascript" src="js/visualizer_manager.js"></script>
   </head>
   <body>
-    <div class="grid-container">
-      <div class="controls">
-        <div>
+    <div class="layout-wrapper">
+      <ul id="menu-container">
+        <li>
           <button type="button" id="remove_threads">Remove Threads</button>
           <button type="button" id="add_threads">Add Threads</button>
-        </div>
+        </li>
 
-        <div>
+        <li>
           <label for="bead_number">Number of Beads</label>
           <input id="bead_number" type="number" min="1" value="40" />
-        </div>
+        </li>
 
-        <div>
+        <li>
           <label for="bead_colour" class="left">Bead Colour</label>
           <input id="bead_colour" type="color" value="#ffffff" class="left" />
           <div id="colour_name"></div>
-        </div>
+        </li>
+      </ul>
 
-        <div class="visualization" id="stringing_guide"></div>
-        <div class="visualization" id="printable_stringing_guide"></div>
-      </div>
-
-      <div class="visualization" id="braided"></div>
-      <div class="visualization" id="three_d"></div>
-      <div class="visualization" id="unbraided"></div>
+      <div id="layout-container"></div>
     </div>
   </body>
 </html>

@@ -44,6 +44,16 @@ class VisualizerManager {
     this.visualizers.push(visualizer);
   }
 
+  deregister_visualizer(visualizer) {
+    var index = this.visualizers.indexOf(visualizer);
+
+    if (index > -1) {
+      this.visualizers.splice(index, 1);
+    }
+
+    visualizer.destroy();
+  }
+
   render() {
     for (var i = 0; i < this.visualizers.length; i++) {
       this.visualizers[i].render();

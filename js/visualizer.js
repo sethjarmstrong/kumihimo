@@ -11,16 +11,14 @@ class Visualizer {
     this.bead_svgs = [];
     this.clean_element();
 
-    this.element.setAttribute('style', this.style());
-
     var element = this.element;
     this.elements().forEach(function(e) {
       element.appendChild(e);
     });
   }
 
-  style() {
-    return 'style', 'height: ' + this.height + '; ' + 'width: ' + this.width;
+  destroy() {
+    this.clean_element();
   }
 
   clean_element() {

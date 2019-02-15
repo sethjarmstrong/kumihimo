@@ -5,43 +5,84 @@ class ThreeDVisualizer extends Visualizer {
     this.beads = [];
     this.numThreads = 0;
     this.numBeads = 0;
+    this.cached_width = 0;
+    this.cached_height = 0;
+    this.scene = null;
+  }
+
+  fresh_render() {
     this.setScene();
+
+    if (this.scene === null) {
+      return;
+    }
+
+    this.loom.weave();
+
+    while(this.beads.length !== 0) {
+      this.scene.remove(this.beads.pop().mesh);
+    }
+
+    var xorigin = 0;
+    var zorigin = 0;
+    var y = this.loom.beads.length;
+
+    for (var i = 0; i < this.loom.beads.length; i++) {
+      var row = this.loom.beads[i];
+      var angle_offset = -(this.bead_angle(1) / 2 * (i % (this.beads_per_row * 2)));
+
+      for (var j = 0; j < row.length; j++) {
+        var x = xorigin + this.weave_radius * Math.cos(this.bead_angle(j) + angle_offset);
+        var z = zorigin + this.weave_radius * Math.sin(this.bead_angle(j) + angle_offset);
+        var bead = this.bead(row[j], x, y, z);
+        this.beads.push(bead);
+        this.scene.add(bead.mesh);
+      }
+
+      y -= 2;
+    }
+
+    this.numThreads = this.braid.numThreads;
+    this.numBeads = this.braid.numBeads;
+  }
+
+  resize() {
+    this.cached_width = this.element.clientWidth;
+    this.cached_height = this.element.clientHeight;
+    this.camera.aspect = this.cached_width / this.cached_height;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(this.cached_width, this.cached_height);
+  }
+
+  colour_render() {
+    this.beads.forEach(function(bead) {
+      bead.mesh.material.color.set(bead.bead.colour);
+    });
   }
 
   render() {
-    if (this.numThreads != this.braid.numThreads || this.numBeads != this.braid.numBeads) {
-      this.loom.weave();
-
-      while(this.beads.length != 0) {
-        this.scene.remove(this.beads.pop().mesh);
-      }
-
-      var xorigin = 0;
-      var zorigin = 0;
-      var y = this.loom.beads.length;
-
-      for (var i = 0; i < this.loom.beads.length; i++) {
-        var row = this.loom.beads[i];
-        var angle_offset = -(this.bead_angle(1) / 2 * (i % (this.beads_per_row * 2)));
-
-        for (var j = 0; j < row.length; j++) {
-          var x = xorigin + this.weave_radius * Math.cos(this.bead_angle(j) + angle_offset);
-          var z = zorigin + this.weave_radius * Math.sin(this.bead_angle(j) + angle_offset);
-          var bead = this.bead(row[j], x, y, z);
-          this.beads.push(bead);
-          this.scene.add(bead.mesh);
-        }
-
-        y -= 2;
-      }
-
-      this.numThreads = this.braid.numThreads;
-      this.numBeads = this.braid.numBeads;
+    if (this.scene === null || this.numThreads !== this.braid.numThreads || this.numBeads !== this.braid.numBeads) {
+      this.fresh_render();
+    } else if (this.cached_width !== this.element.clientWidth || this.cached_height !== this.element.clientHeight) {
+      this.resize();
     } else {
-      this.beads.forEach(function(bead) {
-        bead.mesh.material.color.set(bead.bead.colour);
-      });
+      this.colour_render();
     }
+  }
+
+  destroy() {
+    cancelAnimationFrame(this.id);
+
+    while(this.beads.length !== 0) {
+      this.scene.remove(this.beads.pop().mesh);
+    }
+
+    this.scene = null;
+    this.camera = null;
+    this.light = null;
+    this.renderer = null;
+
+    super.destroy();
   }
 
   get weave_radius() {
@@ -67,27 +108,34 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   setScene() {
+    if (this.element.clientWidth === 0 || this.element.clientHeight === 0) {
+      return;
+    }
+
+    this.cached_width = this.element.clientWidth;
+    this.cached_height = this.element.clientHeight;
+
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xf0f0f0);
+    this.scene.background = new THREE.Color(0xe1e1e1);
 
-    var camera = new THREE.PerspectiveCamera(75, this.element.clientWidth / this.element.clientHeight, 0.1, 1000);
-    camera.position.set(0, 0, 50);
-    camera.lookAt(0, 0, 0);
+    this.camera = new THREE.PerspectiveCamera(75, this.element.clientWidth / this.element.clientHeight, 0.1, 1000);
+    this.camera.position.set(0, 0, 50);
+    this.camera.lookAt(0, 0, 0);
 
-    var light = new THREE.PointLight( 0xffffff, 0.8 );
-    camera.add(light);
+    this.light = new THREE.PointLight( 0xffffff, 0.8 );
+    this.camera.add(this.light);
 
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setSize(this.element.clientWidth, this.element.clientHeight);
-    this.element.appendChild(renderer.domElement);
+    this.renderer = new THREE.WebGLRenderer();
+    this.renderer.setSize(this.element.clientWidth, this.element.clientHeight);
+    this.element.appendChild(this.renderer.domElement);
 
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    var controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
     controls.enablePan = false;
 
-    var scene = this.scene;
+    var this_ = this;
     function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
+      this_.id = requestAnimationFrame(animate);
+      this_.renderer.render(this_.scene, this_.camera);
     }
 
     animate();

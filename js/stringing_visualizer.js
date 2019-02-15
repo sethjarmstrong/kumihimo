@@ -1,8 +1,4 @@
 class StringingVisualizer extends Visualizer {
-  style() {
-    return '';
-  }
-
   elements() {
     var elements = [];
     for (var i = 0; i < this.braid.threads.length; i++) {
