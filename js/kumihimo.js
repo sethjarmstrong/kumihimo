@@ -152,6 +152,7 @@ class Braid {
         manager.register_visualizer(visualizer);
         container.on('destroy', function(container) { manager.deregister_visualizer(visualizer); });
         container.on('resize', function(container) { manager.render(); });
+        container.on('tabClick', function(container) { manager.render(); });
         manager.render();
       };
     }
