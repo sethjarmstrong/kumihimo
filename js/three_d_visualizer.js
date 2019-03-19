@@ -13,6 +13,10 @@ class ThreeDVisualizer extends Visualizer {
   fresh_render() {
     this.setScene();
 
+    // If the scene is null then setScene failed to run. This can happen
+    // normally when the window containing the visualization has not been
+    // created, or when it has a width and height of zero.
+    // In any case, abort!
     if (this.scene === null) {
       return;
     }
@@ -77,6 +81,7 @@ class ThreeDVisualizer extends Visualizer {
       this.scene.remove(this.beads.pop().mesh);
     }
 
+    this.beads = null;
     this.scene = null;
     this.camera = null;
     this.light = null;
@@ -100,9 +105,8 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   bead(bead, x, y, z) {
-    var geometry = new THREE.SphereGeometry(1, 32, 32);
     var material = new THREE.MeshBasicMaterial({ color: bead.colour });
-    var mesh = new THREE.Mesh(geometry, material);
+    var mesh = new THREE.Mesh(this.geometry, material);
     mesh.position.set(x, y, z);
     return { bead: bead, mesh: mesh};
   }
@@ -112,26 +116,53 @@ class ThreeDVisualizer extends Visualizer {
       return;
     }
 
+    this._set_viewport_size();
+    this._create_scene();
+    this._create_camera();
+    this._create_light();
+    this._create_renderer();
+    this._create_controls();
+    this._create_geometry();
+    this._animate();
+  }
+
+  _set_viewport_size() {
     this.cached_width = this.element.clientWidth;
     this.cached_height = this.element.clientHeight;
+  }
 
+  _create_scene() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xe1e1e1);
+  }
 
+  _create_camera() {
     this.camera = new THREE.PerspectiveCamera(75, this.element.clientWidth / this.element.clientHeight, 0.1, 1000);
     this.camera.position.set(0, 0, 50);
     this.camera.lookAt(0, 0, 0);
+  }
 
+  _create_light() {
     this.light = new THREE.PointLight( 0xffffff, 0.8 );
     this.camera.add(this.light);
+  }
 
+  _create_renderer() {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(this.element.clientWidth, this.element.clientHeight);
     this.element.appendChild(this.renderer.domElement);
+  }
 
+  _create_controls() {
     var controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
     controls.enablePan = false;
+  }
 
+  _create_geometry() {
+    this.geometry = new THREE.SphereBufferGeometry(1, 32, 32);
+  }
+
+  _animate() {
     var this_ = this;
     function animate() {
       this_.id = requestAnimationFrame(animate);
