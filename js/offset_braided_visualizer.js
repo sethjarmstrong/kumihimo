@@ -31,12 +31,12 @@ class OffsetBraidedVisualizer extends Visualizer {
   svgs() {
     var elements = [];
 
-    var row_width = 100 / this.rows;
-    var row_mid = row_width / 2;
+    var row_height = 100 / this.rows;
+    var row_mid = row_height / 2;
     var beads_to_wrap = 0;
 
     for (var i = 0; i < this.loom.beads.length; i++) {
-      var y = (row_width * i + row_mid) + '%';
+      var y = row_height * i + row_mid;
       var row = this.wrap_beads(this.loom.beads[i], beads_to_wrap);
       var row_svgs = this.row_svg(row, y, i % 2 === 0);
 
@@ -61,7 +61,7 @@ class OffsetBraidedVisualizer extends Visualizer {
     for (var i = 0; i < row.length; i++) {
       var offset = (use_offset ? column_mid : 0);
       var x = column_width * i + column_mid + offset;
-      elements.push(this.bead_svg(row[i], x, y));
+      elements.push(this.bead_svg(row[i], x, y + '%'));
     }
 
     return elements;
