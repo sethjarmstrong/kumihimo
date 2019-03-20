@@ -35,6 +35,10 @@ class NtcColour {
     this.exactmatch = exactmatch;
     this.index = index;
   }
+
+  get raw() {
+    return [this.rgb.slice(1), this.name];
+  }
 }
 
 var ntc = {

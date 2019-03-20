@@ -119,20 +119,47 @@ class Braid {
     }]
   };
 
+  function get_current_colour() {
+    var colour_value = document.getElementById('bead_colour').value;
+    var colour = ntc.name(colour_value);
+    colour.rgb = document.getElementById('bead_colour').value.toUpperCase();
+    return colour;
+  }
+
   function get_colour_name() {
     var element = document.getElementById('colour_name');
     while (element.firstChild) {
       element.removeChild(element.firstChild);
     }
 
-    var colour_value = document.getElementById('bead_colour').value;
-    var colour_name_input = document.getElementById('colour_name');
-    colour_name_input.value = ntc.name(colour_value).name;
+    document.getElementById('colour_name').value = get_current_colour().name;
   }
 
   function init_colour_picker() {
     document.getElementById('bead_colour').addEventListener('change', get_colour_name);
     get_colour_name();
+
+    document.getElementById('save_colour_name').addEventListener('click', function() {
+      var colour = get_current_colour();
+
+      if (colour.index === -1) {
+        return;
+      }
+
+      var new_colour_name = document.getElementById('colour_name').value;
+      colour.name = new_colour_name;
+
+      var matched_colour_entry = ntc.names[colour.index];
+
+      if (colour.exactmatch) {
+        ntc.names[colour.index] = colour.raw;
+        matched_colour_entry[1] = new_colour_name;
+      } else if (colour.raw[0] < matched_colour_entry[0]) {
+        ntc.names.splice(colour.index, 0, colour.raw);
+      } else {
+        ntc.names.splice(colour.index + 1, 0, colour.raw);
+      }
+    });
   }
 
   function init() {
