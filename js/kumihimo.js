@@ -44,9 +44,11 @@ class Thread {
 }
 
 class Braid {
-  constructor(numThreads, numBeads) {
+  constructor(numThreads, numBeads, beadsPerRow, beadStep) {
     this.numThreads = 0;
     this.numBeads = numBeads;
+    this.beadsPerRow = beadsPerRow;
+    this.beadStep = beadStep;
     this.threads = [];
 
     this.add_threads(numThreads);

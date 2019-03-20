@@ -79,20 +79,19 @@
   }
 
   function init() {
-    var add_threads_button = document.getElementById('add_threads');
-    var remove_threads_button = document.getElementById('remove_threads');
-    var bead_number_input = document.getElementById('bead_number');
-    var bead_colour_picker = document.getElementById('bead_colour');
-
-    var braid = new Braid(12, parseInt(bead_number_input.value, 10));
-
-    var manager = new VisualizerManager(
-      braid,
-      add_threads_button,
-      remove_threads_button,
-      bead_number_input,
-      bead_colour_picker
-    );
+    var controls = {
+      add_threads_button: document.getElementById('add_threads'),
+      remove_threads_button: document.getElementById('remove_threads'),
+      bead_number_input: document.getElementById('bead_number'),
+      bead_colour_picker: document.getElementById('bead_colour'),
+      beads_per_row_input: document.getElementById('beads_per_row'),
+      bead_step_input: document.getElementById('bead_step')
+    };
+    var number_of_beads = parseInt(controls.bead_number_input.value, 10);
+    var beads_per_row = parseInt(controls.beads_per_row_input.value, 10);
+    var bead_step = parseFloat(controls.bead_step_input.value, 10);
+    var braid = new Braid(12, number_of_beads, beads_per_row, bead_step);
+    var manager = new VisualizerManager(braid, controls);
 
     var layout = new window.GoldenLayout(config, $('#layout-container'));
 

@@ -1,10 +1,13 @@
 class VisualizerManager {
-  constructor(braid, add_threads_element, remove_threads_element, number_of_beads_element, colour_picker_element) {
+  constructor(braid, controls) {
     this.braid = braid;
-    this.add_threads_element = add_threads_element;
-    this.remove_threads_element = remove_threads_element;
-    this.number_of_beads_element = number_of_beads_element;
-    this.colour_picker_element = colour_picker_element;
+    this.add_threads_element = controls.add_threads_button;
+    this.remove_threads_element = controls.remove_threads_button;
+    this.number_of_beads_element = controls.bead_number_input;
+    this.colour_picker_element = controls.bead_colour_picker;
+    this.beads_per_row_element = controls.beads_per_row_input;
+    this.bead_step_element = controls.bead_step_input;
+
     this.visualizers = [];
 
     this.setup_add_threads_listener();
@@ -36,6 +39,20 @@ class VisualizerManager {
     var this_ = this;
     this.number_of_beads_element.addEventListener('change', function() {
       this_.braid.set_beads(parseInt(this_.number_of_beads_element.value, 10));
+      this_.render();
+    });
+  }
+
+  setup_beads_per_row_listener() {
+    var this_ = this;
+    this.beads_per_row_element.addEventListener('change', function() {
+      this_.render();
+    });
+  }
+
+  setup_bead_step_listener() {
+    var this_ = this;
+    this.bead_step_element.addEventListener('change', function() {
       this_.render();
     });
   }
