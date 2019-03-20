@@ -29,10 +29,11 @@
 */
 
 class NtcColour {
-  constructor(rgb, name, exactmatch) {
+  constructor(rgb, name, exactmatch, index) {
     this.rgb = rgb;
     this.name = name;
     this.exactmatch = exactmatch;
+    this.index = index;
   }
 }
 
@@ -51,7 +52,7 @@ var ntc = {
     color = color.toUpperCase();
 
     if(color.length < 3 || color.length > 7) {
-      return new NtcColour("#000000", "Invalid Color: " + color, false);
+      return new NtcColour("#000000", "Invalid Color: " + color, false, -1);
     }
 
     if(color.length % 3 == 0) {
@@ -71,7 +72,7 @@ var ntc = {
 
     for(var i = 0; i < ntc.names.length; i++) {
       if(color == "#" + ntc.names[i][0]){
-        return new NtcColour("#" + ntc.names[i][0], ntc.names[i][1], true);
+        return new NtcColour("#" + ntc.names[i][0], ntc.names[i][1], true, i);
       }
 
       ndf1 = Math.pow(r - ntc.names[i][2], 2) + Math.pow(g - ntc.names[i][3], 2) + Math.pow(b - ntc.names[i][4], 2);
@@ -84,7 +85,7 @@ var ntc = {
       }
     }
 
-    return (cl < 0 ? new NtcColour("#000000", "Invalid Color: " + color, false) : new NtcColour("#" + ntc.names[cl][0], ntc.names[cl][1], false));
+    return (cl < 0 ? new NtcColour("#000000", "Invalid Color: " + color, false, -1) : new NtcColour("#" + ntc.names[cl][0], ntc.names[cl][1], false, cl));
   },
 
   // adopted from: Farbtastic 1.2
