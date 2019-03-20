@@ -126,9 +126,8 @@ class Braid {
     }
 
     var colour_value = document.getElementById('bead_colour').value;
-    var colour_name = ntc.name(colour_value).name;
-    var colour_text_node = document.createTextNode(colour_name);
-    element.appendChild(colour_text_node);
+    var colour_name_input = document.getElementById('colour_name');
+    colour_name_input.value = ntc.name(colour_value).name;
   }
 
   function init_colour_picker() {
