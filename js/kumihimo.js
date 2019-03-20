@@ -101,20 +101,20 @@ class Braid {
           componentName: '2d-braided-visualizer',
           componentState: {}
         },
+        /*
         {
           title: 'Offset 2D Braided View',
           type: 'component',
           componentName: 'offset-2d-braided-visualizer',
           componentState: {}
-        }
-        /*
+        },
+        */
         {
           title: '3D Braided View',
           type: 'component',
           componentName: '3d-braided-visualizer',
           componentState: {}
         }
-        */
       ]
     }]
   };
