@@ -13,6 +13,8 @@ class VisualizerManager {
     this.setup_add_threads_listener();
     this.setup_remove_threads_listener();
     this.setup_number_of_beads_listener();
+    this.setup_beads_per_row_listener();
+    this.setup_bead_step_listener();
   }
 
   setup_add_threads_listener() {
@@ -46,6 +48,7 @@ class VisualizerManager {
   setup_beads_per_row_listener() {
     var this_ = this;
     this.beads_per_row_element.addEventListener('change', function() {
+      this_.braid.beadsPerRow = parseInt(this_.beads_per_row_element.value, 10);
       this_.render();
     });
   }
@@ -53,6 +56,7 @@ class VisualizerManager {
   setup_bead_step_listener() {
     var this_ = this;
     this.bead_step_element.addEventListener('change', function() {
+      this_.braid.beadStep = parseFloat(this_.bead_step_element.value, 10);
       this_.render();
     });
   }
