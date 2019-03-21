@@ -43,25 +43,39 @@ class OffsetBraidedVisualizer extends Visualizer {
       // The first half of each row will be our "positive" beads, and the second
       // half of each row will be their opposites, our "negative" beads.
       // Row length is assumed to always be even.
-      var positives = [];
-      var negatives = [];
-
+      var _positives = [];
+      var _negatives = [];
       for (var i = 0; i < this.loom.beads.length; i++) {
         var row = this.loom.beads[i];
-        positives = positives.concat(row.slice(0, row.length / 2));
-        negatives = negatives.concat(row.slice(row.length / 2, row.length));
+        _positives = _positives.concat(row.slice(0, row.length / 2));
+        _negatives = _negatives.concat(row.slice(row.length / 2, row.length));
       }
 
-      this._beads = [positives, negatives];
+      // Now that we've got our positives and negatives, let's subdivide them
+      // into the rows that we need.
+      var positives = [];
+      var negatives = [];
+      while (_positives.length > 0 && _negatives.length > 0) {
+        positives.push(_positives.splice(0, this.braid.beadsPerRow / 2));
+        negatives.push(_negatives.splice(0, this.braid.beadsPerRow / 2));
+      }
+
+      // Now we need to apply wrapping. In actuality this is a view problem, not
+      // a data problem, but it is much easier to take care of here.
+      for (i = 0; i < positives.length; i++) {
+        var positives_row = positives[i];
+        var negatives_row = negatives[i];
+
+        // We want to wrap one bead for every two rows.
+        for (var j = 0; j < Math.floor(i / 2); j++) {
+          positives_row.push(negatives_row.shift());
+          negatives_row.push(positives_row.shift());
+        }
+      }
+
+      this._beads = {positives: positives, negatives: negatives};
     }
     return this._beads;
-  }
-
-  wrap_beads(beads, beads_to_wrap) {
-    for (var i = 0; i < beads_to_wrap; i++) {
-      beads.push(beads.shift());
-    }
-    return beads;
   }
 
   render() {
@@ -71,59 +85,28 @@ class OffsetBraidedVisualizer extends Visualizer {
   }
 
   svgs() {
+    // Need to implement wrapping here. Basically this means moving (a) bead(s)
+    // from one array to the other. This would be easier if each array were
+    // further subdivided into rows.
     var elements = [];
     var beads_to_wrap = 0;
-    var positives = this.beads[0];
-    var negatives = this.beads[1];
+    var this_ = this;
 
-    for (var i = 0; i < positives.length; i++) {
-      var y = (this.row_height * i * this.braid.beadStep + this.row_mid) + '%';
-      var x = this.px_per_bead * (i % (this.braid.beadsPerRow / 2)) + this.px_per_bead / 2;
-      elements.push(this.bead_svg(positives[i], x, y));
-    }
-
-    for (var i = 0; i < negatives.length; i++) {
-      y = (this.row_height * i * this.braid.beadStep + this.row_mid) + '%';
-      x = this.px_per_bead * this.braid.beadsPerRow / 2 + this.px_per_bead * (i % (this.braid.beadsPerRow / 2)) + this.px_per_bead / 2;
-      elements.push(this.bead_svg(negatives[i], x, y));
-    }
-
-    return elements;
-
-    //////
-
-    var elements = [];
-    var beads_to_wrap = 0;
-
-    for (var i = 0; i < this.loom.beads.length; i++) {
-      var y = this.row_height * i + this.row_mid;
-      var row = this.wrap_beads(this.loom.beads[i], beads_to_wrap);
-      var row_svgs = this.row_svg(row, y, i % 2 === 0);
-      elements = elements.concat(row_svgs);
-
-      if (i % 2 === 1) {
-        beads_to_wrap = (beads_to_wrap + 1) % this.beads_per_row;
+    var draw_spiral = function(dataset, offset) {
+      var results = [];
+      for (var i = 0; i < dataset.length; i++) {
+        var row = dataset[i];
+        for (var j = 0; j < row.length; j++) {
+          var y = (this_.row_height * i + j * this_.braid.beadStep * this_.row_height + this_.row_mid) + '%';
+          var x = offset + this_.px_per_bead * j + this_.px_per_bead / 2 + (i % 2 === 0 ? this_.px_per_bead / 2 : 0);
+          results.push(this_.bead_svg(row[j], x, y));
+        }
       }
-    }
+      return results;
+    };
 
-    return elements;
-  }
-
-  row_svg(row, y, use_offset) {
-    var elements = [];
-
-    var column_width = this.px_per_bead;
-    var column_mid = column_width / 2;
-    var beads_per_grouping = row.length / 2;
-
-    // The y position of the next bead should increase half a bead's height,
-    // Resetting when half the beads in the row have been placed.
-    for (var i = 0; i < row.length; i++) {
-      var offset_x = (use_offset ? column_mid : 0);
-      var x = column_width * i + column_mid + offset_x;
-      var offset_y = y + this.row_height / 2 * (i % beads_per_grouping);
-      elements.push(this.bead_svg(row[i], x, offset_y + '%'));
-    }
+    elements = elements.concat(draw_spiral(this.beads.positives, 0));
+    elements = elements.concat(draw_spiral(this.beads.negatives, this.px_per_bead * this.braid.beadsPerRow / 2));
 
     return elements;
   }
