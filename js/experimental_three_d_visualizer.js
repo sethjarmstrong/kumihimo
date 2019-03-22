@@ -8,10 +8,40 @@ class ExperimentalThreeDVisualizer extends Visualizer {
     this.cached_width = 0;
     this.cached_height = 0;
     this.scene = null;
+    this._spirals = undefined;
+  }
+
+  // Since the number of beads per row is now configurable, we need to unpack
+  // the beads returned by the loom (which is an array of rows) a more
+  // appropriate data structure.
+  // Each bead will still have an opposite, so ideally we will have two arrays,
+  // one with all of the beads on one side, and one with all of those beads'
+  // opposites. The braid can then be pieced together by spiralling the two
+  // arrays of beads together.
+  get spirals() {
+    if (this._spirals === undefined) {
+      // The first half of each row will be our "positive" beads, and the second
+      // half of each row will be their opposites, our "negative" beads.
+      // Row length is assumed to always be even.
+      var _positives = [];
+      var _negatives = [];
+      for (var i = 0; i < this.loom.beads.length; i++) {
+        var row = this.loom.beads[i];
+        _positives = _positives.concat(row.slice(0, row.length / 2));
+        _negatives = _negatives.concat(row.slice(row.length / 2, row.length));
+      }
+
+      this._spirals = {positives: _positives, negatives: _negatives};
+    }
+    return this._spirals;
   }
 
   fresh_render() {
-    this.setScene();
+    this._spirals = undefined;
+
+    if (this.scene === null) {
+      this.setScene();
+    }
 
     // If the scene is null then setScene failed to run. This can happen
     // normally when the window containing the visualization has not been
@@ -26,6 +56,37 @@ class ExperimentalThreeDVisualizer extends Visualizer {
     while(this.beads.length !== 0) {
       this.scene.remove(this.beads.pop().mesh);
     }
+
+    var xorigin = 0;
+    var zorigin = 0;
+    var y = this.braid.beadsPerRow;
+
+    var positives = this.spirals.positives;
+    var negatives = this.spirals.negatives;
+
+    for (var i = 0; i < positives.length; i++) {
+      var angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.braid.beadsPerRow) % (this.braid.beadsPerRow * 2)));
+      var x = xorigin - this.weave_radius * Math.cos(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
+      var z = zorigin - this.weave_radius * Math.sin(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
+      var bead = this.bead(positives[i], x, y, z);
+      this.beads.push(bead);
+      this.scene.add(bead.mesh);
+      y -= this.braid.beadStep * 2;
+    }
+
+    y = this.braid.beadsPerRow;
+    for (var i = 0; i < negatives.length; i++) {
+      angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.braid.beadsPerRow) % (this.braid.beadsPerRow * 2)));
+      x = xorigin + this.weave_radius * Math.cos(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
+      z = zorigin + this.weave_radius * Math.sin(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
+      bead = this.bead(negatives[i], x, y, z);
+      this.beads.push(bead);
+      this.scene.add(bead.mesh);
+      y -= this.braid.beadStep * 2;
+    }
+
+    return;
+    ////
 
     var xorigin = 0;
     var zorigin = 0;
@@ -75,6 +136,10 @@ class ExperimentalThreeDVisualizer extends Visualizer {
   }
 
   destroy() {
+    if (this.scene === null) {
+      return;
+    }
+
     cancelAnimationFrame(this.id);
 
     while(this.beads.length !== 0) {
@@ -97,11 +162,11 @@ class ExperimentalThreeDVisualizer extends Visualizer {
       the bead circle is C / (2 * PI). Assuming each bead has a diameter of 2,
       this gives us this calculation for the radius of the bead circle.
      */
-    return this.beads_per_row / Math.PI;
+    return this.braid.beadsPerRow / Math.PI;
   }
 
   bead_angle(bead_number) {
-    return -2 * Math.PI / this.beads_per_row * bead_number;
+    return -2 * Math.PI / this.braid.beadsPerRow * bead_number;
   }
 
   bead(bead, x, y, z) {
