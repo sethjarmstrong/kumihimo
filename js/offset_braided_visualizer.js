@@ -98,6 +98,7 @@ class OffsetBraidedVisualizer extends Visualizer {
         var row = dataset[i];
         for (var j = 0; j < row.length; j++) {
           var y = (this_.row_height * i + j * this_.braid.beadStep * this_.row_height + this_.row_mid) + '%';
+          //var y = (this_.row_height * i + j * 0 * this_.row_height + this_.row_mid) + '%';
           var x = offset + this_.px_per_bead * j + this_.px_per_bead / 2 + (i % 2 === 0 ? this_.px_per_bead / 2 : 0);
           results.push(this_.bead_svg(row[j], x, y));
         }
