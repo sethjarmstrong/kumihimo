@@ -2,7 +2,6 @@
 // String 7, its opposite
 // String 2, its opposite
 // String 1, its opposite
-
 class Group {
   constructor(threads) {
     this.threads = threads;
@@ -17,38 +16,21 @@ class Group {
 }
 
 class Loom {
-  constructor(braid) {
-    this.braid = braid;
+  constructor(braid) { this.braid = braid; }
+
+  get number_of_threads()       { return this.braid.threads.length; }
+  get number_of_beads_per_row() { return this.number_of_threads / 2; }
+  get current_bead_row()        { return this.beads[this.current_row_index]; }
+  get total_beads()             { return this.braid.numThreads * this.braid.numBeads; }
+
+  get woven_beads() {
+    var count = 0;
+    this.beads.forEach(function(row) { row.forEach(function(bead) { count++; }); });
+    return count;
   }
 
   opposite_thread_index(thread_index) {
     return (thread_index + this.number_of_threads / 2) % this.number_of_threads;
-  }
-
-  get number_of_threads() {
-    return this.braid.threads.length;
-  }
-
-  get number_of_beads_per_row() {
-    return this.number_of_threads / 2;
-  }
-
-  get current_bead_row() {
-    return this.beads[this.current_row_index];
-  }
-
-  get woven_beads() {
-    var count = 0;
-    this.beads.forEach(function(row) {
-      row.forEach(function(bead) {
-        count++;
-      });
-    });
-    return count;
-  }
-
-  get total_beads() {
-    return this.braid.numThreads * this.braid.numBeads;
   }
 
   normalize_thread_index(index) {
@@ -97,7 +79,5 @@ class Loom {
     }
   }
 
-  create_row() {
-    this.beads[++this.current_row_index] = [];
-  }
+  create_row() { this.beads[++this.current_row_index] = []; }
 }
