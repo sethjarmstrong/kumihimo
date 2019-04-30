@@ -36,7 +36,7 @@ class BraidedVisualizer extends Visualizer {
     var beads_to_wrap = 0;
 
     for (var i = 0; i < this.loom.beads.length; i++) {
-      var y = row_height * i + row_mid;
+      var y = this.braid.beadInitialVerticalPosition + row_height * i + row_mid;
       var row = this.wrap_beads(this.loom.beads[i], beads_to_wrap);
       var row_svgs = this.row_svg(row, y, i % 2 === 0);
 
