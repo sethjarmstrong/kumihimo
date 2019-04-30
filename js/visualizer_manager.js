@@ -6,7 +6,10 @@ class VisualizerManager {
     this.number_of_beads_element = controls.bead_number_input;
     this.colour_picker_element = controls.bead_colour_picker;
     this.beads_per_row_element = controls.beads_per_row_input;
-    this.bead_step_element = controls.bead_step_input;
+
+    this.bead_initial_vertical_position_element = controls.bead_initial_vertical_position_input;
+    this.bead_vertical_step_element = controls.bead_vertical_step_input;
+    this.bead_horizontal_step_element = controls.bead_horizontal_step_input;
 
     this.visualizers = [];
 
@@ -55,8 +58,19 @@ class VisualizerManager {
 
   setup_bead_step_listener() {
     var this_ = this;
-    this.bead_step_element.addEventListener('change', function() {
-      this_.braid.beadStep = parseFloat(this_.bead_step_element.value, 10);
+
+    this.bead_initial_vertical_position_element.addEventListener('change', function() {
+      this_.braid.beadInitialVerticalPosition = parseFloat(this_.bead_initial_vertical_position_element.value, 10);
+      this_.render();
+    });
+
+    this.bead_vertical_step_element.addEventListener('change', function() {
+      this_.braid.beadVerticalStep = parseFloat(this_.bead_vertical_step_element.value, 10);
+      this_.render();
+    });
+
+    this.bead_horizontal_step_element.addEventListener('change', function() {
+      this_.braid.beadHorizontalStep = parseFloat(this_.bead_horizontal_step_element.value, 10);
       this_.render();
     });
   }

@@ -85,12 +85,23 @@
       bead_number_input: document.getElementById('bead_number'),
       bead_colour_picker: document.getElementById('bead_colour'),
       beads_per_row_input: document.getElementById('beads_per_row'),
-      bead_step_input: document.getElementById('bead_step')
+      bead_initial_vertical_position_input: document.getElementById('bead_initial_vertical_position'),
+      bead_vertical_step_input: document.getElementById('bead_vertical_step'),
+      bead_horizontal_step_input: document.getElementById('bead_horizontal_step')
     };
     var number_of_beads = parseInt(controls.bead_number_input.value, 10);
     var beads_per_row = parseInt(controls.beads_per_row_input.value, 10);
-    var bead_step = parseFloat(controls.bead_step_input.value, 10);
-    var braid = new Braid(12, number_of_beads, beads_per_row, bead_step);
+    var bead_initial_vertical_position = parseFloat(controls.bead_initial_vertical_position_input.value, 10);
+    var bead_vertical_step = parseFloat(controls.bead_vertical_step_input.value, 10);
+    var bead_horizontal_step = parseFloat(controls.bead_horizontal_step_input.value, 10);
+    var braid = new Braid(
+      12,
+      number_of_beads,
+      beads_per_row,
+      bead_initial_vertical_position,
+      bead_vertical_step,
+      bead_horizontal_step
+    );
     var manager = new VisualizerManager(braid, controls);
 
     var layout = new window.GoldenLayout(config, $('#layout-container'));

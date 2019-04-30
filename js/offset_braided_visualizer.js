@@ -85,9 +85,6 @@ class OffsetBraidedVisualizer extends Visualizer {
   }
 
   svgs() {
-    // Need to implement wrapping here. Basically this means moving (a) bead(s)
-    // from one array to the other. This would be easier if each array were
-    // further subdivided into rows.
     var elements = [];
     var beads_to_wrap = 0;
     var this_ = this;
@@ -97,7 +94,7 @@ class OffsetBraidedVisualizer extends Visualizer {
       for (var i = 0; i < dataset.length; i++) {
         var row = dataset[i];
         for (var j = 0; j < row.length; j++) {
-          var y = (this_.row_height * i + j * this_.braid.beadStep * this_.row_height + this_.row_mid) + '%';
+          var y = (this_.row_height * i + j * this_.braid.beadVerticalStep * this_.row_height + this_.row_mid) + '%';
           //var y = (this_.row_height * i + j * 0 * this_.row_height + this_.row_mid) + '%';
           var x = offset + this_.px_per_bead * j + this_.px_per_bead / 2 + (i % 2 === 0 ? this_.px_per_bead / 2 : 0);
           results.push(this_.bead_svg(row[j], x, y));
