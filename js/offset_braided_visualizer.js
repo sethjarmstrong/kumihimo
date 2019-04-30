@@ -89,22 +89,22 @@ class OffsetBraidedVisualizer extends Visualizer {
     var beads_to_wrap = 0;
     var this_ = this;
 
-    var draw_spiral = function(dataset, offset) {
+    var draw_spiral = function(dataset, vertical_offset, horizontal_offset) {
       var results = [];
       for (var i = 0; i < dataset.length; i++) {
         var row = dataset[i];
         for (var j = 0; j < row.length; j++) {
-          var y = (this_.row_height * i + j * this_.braid.beadVerticalStep * this_.row_height + this_.row_mid) + '%';
+          var y = vertical_offset + (this_.row_height * i + j * this_.braid.beadVerticalStep * this_.row_height + this_.row_mid) + '%';
           //var y = (this_.row_height * i + j * 0 * this_.row_height + this_.row_mid) + '%';
-          var x = offset + this_.px_per_bead * j + this_.px_per_bead / 2 + (i % 2 === 0 ? this_.px_per_bead / 2 : 0);
+          var x = horizontal_offset + this_.px_per_bead * j * this_.braid.beadHorizontalStep + this_.px_per_bead / 2 + (i % 2 === 0 ? this_.px_per_bead / 2 : 0);
           results.push(this_.bead_svg(row[j], x, y));
         }
       }
       return results;
     };
 
-    elements = elements.concat(draw_spiral(this.beads.positives, 0));
-    elements = elements.concat(draw_spiral(this.beads.negatives, this.px_per_bead * this.braid.beadsPerRow / 2));
+    elements = elements.concat(draw_spiral(this.beads.positives, this.braid.beadInitialVerticalPosition, 0));
+    elements = elements.concat(draw_spiral(this.beads.negatives, this.braid.beadInitialVerticalPosition, this.braid.beadHorizontalStep * this.px_per_bead * this.braid.beadsPerRow / 2));
 
     return elements;
   }

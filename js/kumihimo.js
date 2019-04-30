@@ -50,7 +50,7 @@ class Braid {
     this.beadsPerRow = beadsPerRow;
     this.beadInitialVerticalPosition = beadInitialVerticalPosition;
     this.beadVerticalStep = beadVerticalStep;
-    this.beadHorizontalStep = this.beadHorizontalStep;
+    this.beadHorizontalStep = beadHorizontalStep;
     this.threads = [];
 
     this.add_threads(numThreads);
