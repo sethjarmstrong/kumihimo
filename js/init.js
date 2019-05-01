@@ -11,6 +11,12 @@
     content: [{
       type: 'row',
       content: [
+        {
+          title: 'Unbraided View',
+          type: 'component',
+          componentName: 'unbraided-visualizer',
+          componentState: {}
+        },
         /*
         {
           title: '2D Braided View',
@@ -18,27 +24,27 @@
           componentName: '2d-braided-visualizer',
           componentState: {}
         },
-        */
         {
           title: 'Offset 2D Braided View',
           type: 'component',
           componentName: 'offset-2d-braided-visualizer',
           componentState: {}
         },
-        /*
+        */
         {
           title: '3D Braided View',
           type: 'component',
           componentName: '3d-braided-visualizer',
           componentState: {}
         }
-        */
+        /*
         {
           title: 'Experimental 3D Braided View',
           type: 'component',
           componentName: 'experimental-3d-braided-visualizer',
           componentState: {}
         }
+        */
       ]
     }]
   };
