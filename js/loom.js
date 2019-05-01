@@ -20,7 +20,6 @@ class Loom {
 
   get number_of_threads()       { return this.braid.threads.length; }
   get number_of_beads_per_row() { return this.number_of_threads / 2; }
-  get current_bead_row()        { return this.beads[this.current_row_index]; }
   get total_beads()             { return this.braid.numThreads * this.braid.numBeads; }
 
   get woven_beads() {
@@ -61,7 +60,7 @@ class Loom {
       );
     }
 
-    this.beads = [[]];
+    this.beads = [[], []];
     this.current_row_index = 0;
 
     while(this.woven_beads < this.total_beads) {
@@ -70,14 +69,11 @@ class Loom {
   }
 
   step() {
-    if (this.current_bead_row.length == this.number_of_beads_per_row) {
-      this.create_row();
+    for (var i = 0; i < this.groups.length / 2; i++) {
+      this.beads[0].push(this.groups[i].next_bead);
     }
-
-    for (var i = 0; i < this.groups.length; i++) {
-      this.current_bead_row.push(this.groups[i].next_bead);
+    for (var i = this.groups.length / 2; i < this.groups.length; i++) {
+      this.beads[1].push(this.groups[i].next_bead);
     }
   }
-
-  create_row() { this.beads[++this.current_row_index] = []; }
 }

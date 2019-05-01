@@ -30,9 +30,12 @@ class ThreeDVisualizer extends Visualizer {
     var xorigin = 0;
     var zorigin = 0;
     var y = this.loom.beads.length;
+    var num_rows = this.braid.numBeads * this.braid.numThreads / this.braid.beadsPerRow;
 
-    for (var i = 0; i < this.loom.beads.length; i++) {
-      var row = this.loom.beads[i];
+    for (var i = 0; i < num_rows; i++) {
+      var row = this.loom.beads[0].slice(i * this.braid.beadsPerRow / 2, (i + 1) * this.braid.beadsPerRow / 2).concat(
+        this.loom.beads[1].slice(i * this.braid.beadsPerRow / 2, (i + 1) * this.braid.beadsPerRow / 2)
+      );
       var angle_offset = -(this.bead_angle(1) / 2 * (i % (this.beads_per_row * 2)));
 
       for (var j = 0; j < row.length; j++) {
