@@ -71,7 +71,7 @@ class ExperimentalThreeDVisualizer extends Visualizer {
       var bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      y -= this.braid.beadStep * 2;
+      y -= this.braid.beadVerticalStep * 2;
     }
 
     y = this.braid.beadsPerRow;
@@ -82,7 +82,7 @@ class ExperimentalThreeDVisualizer extends Visualizer {
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      y -= this.braid.beadStep * 2;
+      y -= this.braid.beadVerticalStep * 2;
     }
 
     return;
