@@ -60,7 +60,7 @@ class BraidedVisualizer extends Visualizer {
 
     for (var i = 0; i < row.length; i++) {
       var offset = (use_offset ? column_mid : 0);
-      var x = column_width * i + column_mid + offset;
+      var x = column_width * i * this.braid.beadHorizontalStep + column_mid + offset;
       elements.push(this.bead_svg(row[i], x, (y + i * this.braid.beadVerticalStep) + '%'));
     }
 
