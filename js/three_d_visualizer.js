@@ -132,34 +132,46 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   _create_scene() {
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xe1e1e1);
+    if (this.scene === null || this.scene === undefined) {
+      this.scene = new THREE.Scene();
+      this.scene.background = new THREE.Color(0xe1e1e1);
+    }
   }
 
   _create_camera() {
-    this.camera = new THREE.PerspectiveCamera(75, this.element.clientWidth / this.element.clientHeight, 0.1, 1000);
-    this.camera.position.set(0, 0, 50);
-    this.camera.lookAt(0, 0, 0);
+    if (this.camera === null || this.camera === undefined) {
+      this.camera = new THREE.PerspectiveCamera(75, this.element.clientWidth / this.element.clientHeight, 0.1, 1000);
+      this.camera.position.set(0, 0, 50);
+      this.camera.lookAt(0, 0, 0);
+    }
   }
 
   _create_light() {
-    this.light = new THREE.PointLight( 0xffffff, 0.8 );
-    this.camera.add(this.light);
+    if (this.light === null || this.light === undefined) {
+      this.light = new THREE.PointLight( 0xffffff, 0.8 );
+      this.camera.add(this.light);
+    }
   }
 
   _create_renderer() {
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(this.element.clientWidth, this.element.clientHeight);
-    this.element.appendChild(this.renderer.domElement);
+    if (this.renderer === null || this.renderer === undefined) {
+      this.renderer = new THREE.WebGLRenderer();
+      this.renderer.setSize(this.element.clientWidth, this.element.clientHeight);
+      this.element.appendChild(this.renderer.domElement);
+    }
   }
 
   _create_controls() {
-    var controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-    controls.enablePan = false;
+    if (this.controls === null || this.controls === undefined) {
+      this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+      this.controls.enablePan = false;
+    }
   }
 
   _create_geometry() {
-    this.geometry = new THREE.SphereBufferGeometry(1, 32, 32);
+    if (this.geometry === null || this.geometry === undefined) {
+      this.geometry = new THREE.SphereBufferGeometry(1, 32, 32);
+    }
   }
 
   _animate() {
