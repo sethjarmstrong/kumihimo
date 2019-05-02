@@ -5,11 +5,11 @@ class BraidedVisualizer extends Visualizer {
   }
 
   get rows() {
-    return this.braid.numBeads * 2;
+    return this.braid.parameters.num_beads * 2;
   }
 
   get columns() {
-    return this.braid.numThreads / 2;
+    return this.braid.parameters.num_threads / 2;
   }
 
   get width() {
@@ -34,9 +34,10 @@ class BraidedVisualizer extends Visualizer {
     var row_height = 100 / this.rows;
     var row_mid = row_height / 2;
     var beads_to_wrap = 0;
+    var initial_vertical_position = this.braid.two_d_parameters.initial_vertical_position;
 
     for (var i = 0; i < this.loom.beads.length; i++) {
-      var y = this.braid.beadInitialVerticalPosition + row_height * i + row_mid;
+      var y = initial_vertical_position + row_height * i + row_mid;
       var row = this.wrap_beads(this.loom.beads[i], beads_to_wrap);
       var row_svgs = this.row_svg(row, y, i % 2 === 0);
 
@@ -57,11 +58,13 @@ class BraidedVisualizer extends Visualizer {
 
     var column_width = this.px_per_bead;
     var column_mid = column_width / 2;
+    var horizontal_step = this.braid.two_d_parameters.horizontal_step;
+    var vertical_step = this.braid.two_d_parameters.vertical_step;
 
     for (var i = 0; i < row.length; i++) {
       var offset = (use_offset ? column_mid : 0);
-      var x = column_width * i * this.braid.beadHorizontalStep + column_mid + offset;
-      elements.push(this.bead_svg(row[i], x, (y + i * this.braid.beadVerticalStep) + '%'));
+      var x = column_width * i * horizontal_step + column_mid + offset;
+      elements.push(this.bead_svg(row[i], x, (y + i * vertical_step) + '%'));
     }
 
     return elements;

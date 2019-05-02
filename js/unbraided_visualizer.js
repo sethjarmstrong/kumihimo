@@ -1,10 +1,10 @@
 class UnbraidedVisualizer extends Visualizer {
   get rows() {
-    return this.braid.numBeads + 1;
+    return this.braid.parameters.num_beads + 1;
   }
 
   get columns() {
-    return this.braid.numThreads + 1;
+    return this.braid.parameters.num_threads + 1;
   }
 
   elements() {

@@ -5,10 +5,10 @@ class Bead {
 }
 
 class Thread {
-  constructor(numBeads) {
+  constructor(num_beads) {
     this.beads = [];
     this.current_bead = 0;
-    this.set_beads(numBeads);
+    this.set_beads(num_beads);
   }
 
   change_colour(colour) {
@@ -51,14 +51,6 @@ class Braid {
 
     this.set_threads(this.parameters.num_threads);
   }
-
-  get numThreads() { return this.parameters.num_threads; }
-  get numBeads()   { return this.parameters.num_beads; }
-
-  get beadsPerRow()                 { return this.two_d_parameters.beads_per_row; }
-  get beadInitialVerticalPosition() { return this.two_d_parameters.initial_vertical_position; }
-  get beadVerticalStep()            { return this.two_d_parameters.vertical_step; }
-  get beadHorizontalStep()          { return this.two_d_parameters.horizontal_step; }
 
   set_threads(amount) {
     this.remove_threads(this.parameters.num_threads);

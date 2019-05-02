@@ -18,9 +18,9 @@ class Group {
 class Loom {
   constructor(braid) { this.braid = braid; }
 
-  get number_of_threads()       { return this.braid.threads.length; }
+  get number_of_threads()       { return this.braid.parameters.num_threads; }
   get number_of_beads_per_row() { return this.number_of_threads / 2; }
-  get total_beads()             { return this.braid.numThreads * this.braid.numBeads; }
+  get total_beads()             { return this.number_of_threads * this.braid.parameters.num_beads; }
 
   get woven_beads() {
     var count = 0;

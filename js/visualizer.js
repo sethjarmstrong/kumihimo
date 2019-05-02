@@ -44,7 +44,7 @@ class Visualizer {
   }
 
   get beads_per_row() {
-    return this.braid.numThreads / 2;
+    return this.braid.parameters.num_threads / 2;
   }
 
   elements() {

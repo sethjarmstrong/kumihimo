@@ -23,7 +23,7 @@ class VisualizerManager {
   setup_add_threads_listener() {
     var this_  = this;
     this.add_threads_element.addEventListener('click', function() {
-      if (this_.braid.numThreads <= 28) {
+      if (this_.braid.parameters.num_threads <= 28) {
         this_.braid.add_threads(4);
       }
       this_.render();
@@ -33,7 +33,7 @@ class VisualizerManager {
   setup_remove_threads_listener() {
     var this_  = this;
     this.remove_threads_element.addEventListener('click', function() {
-      if (this_.braid.numThreads > 4) {
+      if (this_.braid.parameters.num_threads > 4) {
         this_.braid.remove_threads(4);
       }
       this_.render();
@@ -51,7 +51,7 @@ class VisualizerManager {
   setup_beads_per_row_listener() {
     var this_ = this;
     this.beads_per_row_element.addEventListener('change', function() {
-      this_.braid.beadsPerRow = parseInt(this_.beads_per_row_element.value, 10);
+      this_.braid.two_d_parameters.beads_per_row = parseInt(this_.beads_per_row_element.value, 10);
       this_.render();
     });
   }
@@ -60,17 +60,17 @@ class VisualizerManager {
     var this_ = this;
 
     this.bead_initial_vertical_position_element.addEventListener('change', function() {
-      this_.braid.beadInitialVerticalPosition = parseFloat(this_.bead_initial_vertical_position_element.value, 10);
+      this_.braid.two_d_parameters.initial_vertical_position = parseFloat(this_.bead_initial_vertical_position_element.value, 10);
       this_.render();
     });
 
     this.bead_vertical_step_element.addEventListener('change', function() {
-      this_.braid.beadVerticalStep = parseFloat(this_.bead_vertical_step_element.value, 10);
+      this_.braid.two_d_parameters.vertical_step = parseFloat(this_.bead_vertical_step_element.value, 10);
       this_.render();
     });
 
     this.bead_horizontal_step_element.addEventListener('change', function() {
-      this_.braid.beadHorizontalStep = parseFloat(this_.bead_horizontal_step_element.value, 10);
+      this_.braid.two_d_parameters.horizontal_step = parseFloat(this_.bead_horizontal_step_element.value, 10);
       this_.render();
     });
   }

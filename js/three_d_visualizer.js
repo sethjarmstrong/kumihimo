@@ -3,8 +3,9 @@ class ThreeDVisualizer extends Visualizer {
     super(braid, element);
     this.loom = new Loom(this.braid);
     this.beads = [];
-    this.numThreads = 0;
-    this.numBeads = 0;
+    this.cached_num_threads = 0;
+    this.cached_num_beads = 0;
+    this.cached_beads_per_row = 0;
     this.cached_width = 0;
     this.cached_height = 0;
     this.scene = null;
@@ -15,7 +16,7 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   get beads_per_row() {
-    return this.braid.beadsPerRow - 0.5;
+    return this.braid.two_d_parameters.beads_per_row - 0.5;
   }
 
   fresh_render() {
@@ -43,6 +44,7 @@ class ThreeDVisualizer extends Visualizer {
 
     var positives = this.spirals.positives;
     var negatives = this.spirals.negatives;
+    var vertical_step = this.braid.two_d_parameters.vertical_step;
 
     for (var i = 0; i < positives.length; i++) {
       var angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.beads_per_row) % (this.beads_per_row * 2)));
@@ -51,7 +53,7 @@ class ThreeDVisualizer extends Visualizer {
       var bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      y -= this.braid.beadVerticalStep * 2;
+      y -= vertical_step * 2;
     }
 
     y = this.beads_per_row;
@@ -62,8 +64,12 @@ class ThreeDVisualizer extends Visualizer {
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      y -= this.braid.beadVerticalStep * 2;
+      y -= vertical_step * 2;
     }
+
+    this.cached_num_threads = this.braid.parameters.num_threads;
+    this.cached_num_beads = this.braid.parameters.num_beads;
+    this.cached_beads_per_row = this.braid.two_d_parameters.beads_per_row;
   }
 
   resize() {
@@ -81,7 +87,10 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   render() {
-    if (this.scene === null || this.numThreads !== this.braid.numThreads || this.numBeads !== this.braid.numBeads) {
+    if (this.scene === null ||
+        this.cached_num_threads !== this.braid.parameters.num_threads ||
+        this.cached_num_beads !== this.braid.parameters.num_beads ||
+        this.cached_beads_per_row !== this.braid.two_d_parameters.beads_per_row) {
       this.fresh_render();
     } else if (this.cached_width !== this.element.clientWidth || this.cached_height !== this.element.clientHeight) {
       this.resize();
