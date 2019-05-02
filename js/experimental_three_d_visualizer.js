@@ -8,16 +8,17 @@ class ExperimentalThreeDVisualizer extends Visualizer {
     this.cached_width = 0;
     this.cached_height = 0;
     this.scene = null;
-    this._spirals = undefined;
   }
 
   get spirals() {
     return { positives: this.loom.beads[0], negatives: this.loom.beads[1] };
   }
 
-  fresh_render() {
-    this._spirals = undefined;
+  get beads_per_row() {
+    return this.braid.beadsPerRow - 0.5;
+  }
 
+  fresh_render() {
     if (this.scene === null) {
       this.setScene();
     }
@@ -38,26 +39,26 @@ class ExperimentalThreeDVisualizer extends Visualizer {
 
     var xorigin = 0;
     var zorigin = 0;
-    var y = this.braid.beadsPerRow;
+    var y = this.beads_per_row;
 
     var positives = this.spirals.positives;
     var negatives = this.spirals.negatives;
 
     for (var i = 0; i < positives.length; i++) {
-      var angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.braid.beadsPerRow) % (this.braid.beadsPerRow * 2)));
-      var x = xorigin - this.weave_radius * Math.cos(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
-      var z = zorigin - this.weave_radius * Math.sin(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
+      var angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.beads_per_row) % (this.beads_per_row * 2)));
+      var x = xorigin - this.weave_radius * Math.cos(this.bead_angle(i % this.beads_per_row) + angle_offset);
+      var z = zorigin - this.weave_radius * Math.sin(this.bead_angle(i % this.beads_per_row) + angle_offset);
       var bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
       y -= this.braid.beadVerticalStep * 2;
     }
 
-    y = this.braid.beadsPerRow;
+    y = this.beads_per_row;
     for (var i = 0; i < negatives.length; i++) {
-      angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.braid.beadsPerRow) % (this.braid.beadsPerRow * 2)));
-      x = xorigin + this.weave_radius * Math.cos(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
-      z = zorigin + this.weave_radius * Math.sin(this.bead_angle(i % this.braid.beadsPerRow) + angle_offset);
+      angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.beads_per_row) % (this.beads_per_row * 2)));
+      x = xorigin + this.weave_radius * Math.cos(this.bead_angle(i % this.beads_per_row) + angle_offset);
+      z = zorigin + this.weave_radius * Math.sin(this.bead_angle(i % this.beads_per_row) + angle_offset);
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
@@ -141,11 +142,11 @@ class ExperimentalThreeDVisualizer extends Visualizer {
       the bead circle is C / (2 * PI). Assuming each bead has a diameter of 2,
       this gives us this calculation for the radius of the bead circle.
      */
-    return this.braid.beadsPerRow / Math.PI;
+    return this.beads_per_row / Math.PI;
   }
 
   bead_angle(bead_number) {
-    return -2 * Math.PI / this.braid.beadsPerRow * bead_number;
+    return -2 * Math.PI / this.beads_per_row * bead_number;
   }
 
   bead(bead, x, y, z) {
