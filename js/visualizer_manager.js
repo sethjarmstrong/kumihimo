@@ -1,15 +1,15 @@
 class VisualizerManager {
   constructor(braid, controls) {
     this.braid = braid;
-    this.add_threads_element = controls.add_threads_button;
-    this.remove_threads_element = controls.remove_threads_button;
-    this.number_of_beads_element = controls.bead_number_input;
-    this.colour_picker_element = controls.bead_colour_picker;
-    this.beads_per_row_element = controls.beads_per_row_input;
+    this.add_threads_element = controls.add_threads;
+    this.remove_threads_element = controls.remove_threads;
+    this.number_of_beads_element = controls.bead_number;
+    this.colour_picker_element = controls.bead_colour;
+    this.beads_per_row_element = controls.beads_per_row;
 
-    this.bead_initial_vertical_position_element = controls.bead_initial_vertical_position_input;
-    this.bead_vertical_step_element = controls.bead_vertical_step_input;
-    this.bead_horizontal_step_element = controls.bead_horizontal_step_input;
+    this.bead_initial_vertical_position_element = controls.bead_initial_vertical_position;
+    this.bead_vertical_step_element = controls.bead_vertical_step;
+    this.bead_horizontal_step_element = controls.bead_horizontal_step;
 
     this.visualizers = [];
 

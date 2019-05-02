@@ -85,26 +85,30 @@
   }
 
   function init() {
-    var controls = {
-      add_threads_button: document.getElementById('add_threads'),
-      remove_threads_button: document.getElementById('remove_threads'),
-      bead_number_input: document.getElementById('bead_number'),
-      bead_colour_picker: document.getElementById('bead_colour'),
-      beads_per_row_input: document.getElementById('beads_per_row'),
-      bead_initial_vertical_position_input: document.getElementById('bead_initial_vertical_position'),
-      bead_vertical_step_input: document.getElementById('bead_vertical_step'),
-      bead_horizontal_step_input: document.getElementById('bead_horizontal_step')
-    };
+    var controls = {};
+    [
+      'add_threads',
+      'remove_threads',
+      'bead_number',
+      'bead_colour',
+      'beads_per_row',
+      'bead_initial_vertical_position',
+      'bead_vertical_step',
+      'bead_horizontal_step',
+      '3d_radius',
+      '3d_bead_step',
+      '3d_vertical_step',
+    ].forEach(function(id) { controls[id] = document.getElementById(id); });
 
     var parameters = {
       num_threads: 12,
-      num_beads: parseInt(controls.bead_number_input.value, 10)
+      num_beads: parseInt(controls.bead_number.value, 10)
     };
     var two_d_parameters = {
-      beads_per_row: parseInt(controls.beads_per_row_input.value, 10),
-      initial_vertical_position: parseFloat(controls.bead_initial_vertical_position_input.value, 10),
-      vertical_step: parseFloat(controls.bead_vertical_step_input.value, 10),
-      horizontal_step: parseFloat(controls.bead_horizontal_step_input.value, 10)
+      beads_per_row: parseInt(controls.beads_per_row.value, 10),
+      initial_vertical_position: parseFloat(controls.bead_initial_vertical_position.value, 10),
+      vertical_step: parseFloat(controls.bead_vertical_step.value, 10),
+      horizontal_step: parseFloat(controls.bead_horizontal_step.value, 10)
     };
     var braid = new Braid(parameters, two_d_parameters);
 
