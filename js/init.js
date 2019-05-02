@@ -110,7 +110,12 @@
       vertical_step: parseFloat(controls.bead_vertical_step.value, 10),
       horizontal_step: parseFloat(controls.bead_horizontal_step.value, 10)
     };
-    var braid = new Braid(parameters, two_d_parameters);
+    var three_d_parameters = {
+      radius: parseFloat(controls['3d_radius'].value, 10),
+      bead_step: parseFloat(controls['3d_bead_step'].value, 10),
+      vertical_step: parseFloat(controls['3d_vertical_step'].value, 10)
+    };
+    var braid = new Braid(parameters, two_d_parameters, three_d_parameters);
 
     var manager = new VisualizerManager(braid, controls);
 
