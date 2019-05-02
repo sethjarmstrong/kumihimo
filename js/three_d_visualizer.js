@@ -64,31 +64,6 @@ class ThreeDVisualizer extends Visualizer {
       this.scene.add(bead.mesh);
       y -= this.braid.beadVerticalStep * 2;
     }
-
-    return;
-    ////
-
-    var xorigin = 0;
-    var zorigin = 0;
-    var y = this.loom.beads.length;
-
-    for (var i = 0; i < this.loom.beads.length; i++) {
-      var row = this.loom.beads[i];
-      var angle_offset = -(this.bead_angle(1) / 2 * (i % (this.beads_per_row * 2)));
-
-      for (var j = 0; j < row.length; j++) {
-        var x = xorigin + this.weave_radius * Math.cos(this.bead_angle(j) + angle_offset);
-        var z = zorigin + this.weave_radius * Math.sin(this.bead_angle(j) + angle_offset);
-        var bead = this.bead(row[j], x, y, z);
-        this.beads.push(bead);
-        this.scene.add(bead.mesh);
-      }
-
-      y -= 2;
-    }
-
-    this.numThreads = this.braid.numThreads;
-    this.numBeads = this.braid.numBeads;
   }
 
   resize() {
