@@ -116,6 +116,7 @@
       vertical_step: parseFloat(controls['3d_vertical_step'].value, 10)
     };
     var braid = new Braid(parameters, two_d_parameters, three_d_parameters);
+    braid.load_demo();
 
     var manager = new VisualizerManager(braid, controls);
 

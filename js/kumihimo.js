@@ -86,4 +86,30 @@ class Braid {
       thread.current_bead = 0;
     });
   }
+
+  load_demo() {
+    this.set_threads(12);
+    this.set_beads(5);
+
+    var colours = {
+       0: { 0: '#035fb2', 1: '#ffffff', 2: '#035fb2', 3: '#fef100', 4: '#ffffff' },
+       1: { 0: '#035fb2', 1: '#ffffff', 2: '#035fb2', 3: '#035fb2', 4: '#ffffff' },
+       2: { 0: '#ffffff', 1: '#ffffff', 2: '#fef100', 3: '#035fb2', 4: '#ffffff' },
+       3: { 0: '#ffffff', 1: '#ffffff', 2: '#fef100', 3: '#ffffff', 4: '#ffffff' },
+       4: { 0: '#ffffff', 1: '#ffffff', 2: '#035fb2', 3: '#ffffff', 4: '#ffffff' },
+       5: { 0: '#ffffff', 1: '#035fb2', 2: '#fef100', 3: '#ffffff', 4: '#ffffff' },
+       6: { 0: '#ffffff', 1: '#035fb2', 2: '#fef100', 3: '#ffffff', 4: '#ffffff' },
+       7: { 0: '#ffffff', 1: '#fef100', 2: '#035fb2', 3: '#ffffff', 4: '#ffffff' },
+       8: { 0: '#ffffff', 1: '#fef100', 2: '#035fb2', 3: '#ffffff', 4: '#035fb2' },
+       9: { 0: '#ffffff', 1: '#fef100', 2: '#ffffff', 3: '#ffffff', 4: '#ffffff' },
+      10: { 0: '#ffffff', 1: '#035fb2', 2: '#ffffff', 3: '#035fb2', 4: '#ffffff' },
+      11: { 0: '#035fb2', 1: '#035fb2', 2: '#ffffff', 3: '#035fb2', 4: '#ffffff' },
+    };
+
+    for (var thread_index in colours) {
+      for (var bead_index in colours[thread_index]) {
+        this.threads[thread_index].beads[bead_index].colour = colours[thread_index][bead_index];
+      }
+    }
+  }
 }
