@@ -70,17 +70,17 @@ class VisualizerManager {
   setup_three_d_parameters_listener() {
     var this_ = this;
     this.three_d_radius_element.addEventListener('change', function() {
-      this_.braid.three_d_parameters.three_d_radius = parseFloat(this_.three_d_radius_element.value, 10);
+      this_.braid.three_d_parameters.radius = parseFloat(this_.three_d_radius_element.value, 10);
       this_.render();
     });
 
     this.three_d_bead_step_element.addEventListener('change', function() {
-      this_.braid.three_d_parameters.three_d_bead_step = parseFloat(this_.three_d_bead_step_element.value, 10);
+      this_.braid.three_d_parameters.bead_step = parseFloat(this_.three_d_bead_step_element.value, 10);
       this_.render();
     });
 
     this.three_d_vertical_step_element.addEventListener('change', function() {
-      this_.braid.three_d_parameters.three_d_vertical_step = parseFloat(this_.three_d_vertical_step_element.value, 10);
+      this_.braid.three_d_parameters.vertical_step = parseFloat(this_.three_d_vertical_step_element.value, 10);
       this_.render();
     });
   }
