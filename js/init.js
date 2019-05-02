@@ -31,20 +31,20 @@
           componentState: {}
         },
         */
+        /*
         {
           title: '3D Braided View',
           type: 'component',
           componentName: '3d-braided-visualizer',
           componentState: {}
         }
-        /*
+        */
         {
           title: 'Experimental 3D Braided View',
           type: 'component',
           componentName: 'experimental-3d-braided-visualizer',
           componentState: {}
         }
-        */
       ]
     }]
   };
