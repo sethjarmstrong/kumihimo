@@ -11,29 +11,8 @@ class ExperimentalThreeDVisualizer extends Visualizer {
     this._spirals = undefined;
   }
 
-  // Since the number of beads per row is now configurable, we need to unpack
-  // the beads returned by the loom (which is an array of rows) a more
-  // appropriate data structure.
-  // Each bead will still have an opposite, so ideally we will have two arrays,
-  // one with all of the beads on one side, and one with all of those beads'
-  // opposites. The braid can then be pieced together by spiralling the two
-  // arrays of beads together.
   get spirals() {
-    if (this._spirals === undefined) {
-      // The first half of each row will be our "positive" beads, and the second
-      // half of each row will be their opposites, our "negative" beads.
-      // Row length is assumed to always be even.
-      var _positives = [];
-      var _negatives = [];
-      for (var i = 0; i < this.loom.beads.length; i++) {
-        var row = this.loom.beads[i];
-        _positives = _positives.concat(row.slice(0, row.length / 2));
-        _negatives = _negatives.concat(row.slice(row.length / 2, row.length));
-      }
-
-      this._spirals = {positives: _positives, negatives: _negatives};
-    }
-    return this._spirals;
+    return { positives: this.loom.beads[0], negatives: this.loom.beads[1] };
   }
 
   fresh_render() {
