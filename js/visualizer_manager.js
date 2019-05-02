@@ -11,16 +11,18 @@ class VisualizerManager {
     this.bead_vertical_step_element = controls.bead_vertical_step;
     this.bead_horizontal_step_element = controls.bead_horizontal_step;
 
+    this.three_d_radius_element = controls['3d_radius'];
+    this.three_d_bead_step_element = controls['3d_bead_step'];
+    this.three_d_vertical_step_element = controls['3d_vertical_step'];
+
     this.visualizers = [];
 
-    this.setup_add_threads_listener();
-    this.setup_remove_threads_listener();
-    this.setup_number_of_beads_listener();
-    this.setup_beads_per_row_listener();
-    this.setup_bead_step_listener();
+    this.setup_parameters_listener();
+    this.setup_two_d_parameters_listener();
+    this.setup_three_d_parameters_listener();
   }
 
-  setup_add_threads_listener() {
+  setup_parameters_listener() {
     var this_  = this;
     this.add_threads_element.addEventListener('click', function() {
       if (this_.braid.parameters.num_threads <= 28) {
@@ -28,36 +30,26 @@ class VisualizerManager {
       }
       this_.render();
     });
-  }
 
-  setup_remove_threads_listener() {
-    var this_  = this;
     this.remove_threads_element.addEventListener('click', function() {
       if (this_.braid.parameters.num_threads > 4) {
         this_.braid.remove_threads(4);
       }
       this_.render();
     });
-  }
 
-  setup_number_of_beads_listener() {
-    var this_ = this;
     this.number_of_beads_element.addEventListener('change', function() {
       this_.braid.set_beads(parseInt(this_.number_of_beads_element.value, 10));
       this_.render();
     });
   }
 
-  setup_beads_per_row_listener() {
+  setup_two_d_parameters_listener() {
     var this_ = this;
     this.beads_per_row_element.addEventListener('change', function() {
       this_.braid.two_d_parameters.beads_per_row = parseInt(this_.beads_per_row_element.value, 10);
       this_.render();
     });
-  }
-
-  setup_bead_step_listener() {
-    var this_ = this;
 
     this.bead_initial_vertical_position_element.addEventListener('change', function() {
       this_.braid.two_d_parameters.initial_vertical_position = parseFloat(this_.bead_initial_vertical_position_element.value, 10);
@@ -71,6 +63,24 @@ class VisualizerManager {
 
     this.bead_horizontal_step_element.addEventListener('change', function() {
       this_.braid.two_d_parameters.horizontal_step = parseFloat(this_.bead_horizontal_step_element.value, 10);
+      this_.render();
+    });
+  }
+
+  setup_three_d_parameters_listener() {
+    var this_ = this;
+    this.three_d_radius_element.addEventListener('change', function() {
+      this_.braid.three_d_parameters.three_d_radius = parseFloat(this_.three_d_radius_element.value, 10);
+      this_.render();
+    });
+
+    this.three_d_bead_step_element.addEventListener('change', function() {
+      this_.braid.three_d_parameters.three_d_bead_step = parseFloat(this_.three_d_bead_step_element.value, 10);
+      this_.render();
+    });
+
+    this.three_d_vertical_step_element.addEventListener('change', function() {
+      this_.braid.three_d_parameters.three_d_vertical_step = parseFloat(this_.three_d_vertical_step_element.value, 10);
       this_.render();
     });
   }
