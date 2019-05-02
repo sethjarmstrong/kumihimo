@@ -1,4 +1,4 @@
-class ExperimentalThreeDVisualizer extends Visualizer {
+class ThreeDVisualizer extends Visualizer {
   constructor(braid, element) {
     super(braid, element);
     this.loom = new Loom(this.braid);
