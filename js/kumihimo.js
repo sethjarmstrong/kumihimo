@@ -44,37 +44,46 @@ class Thread {
 }
 
 class Braid {
-  constructor(numThreads, numBeads, beadsPerRow, beadInitialVerticalPosition, beadVerticalStep, beadHorizontalStep) {
-    this.numThreads = 0;
-    this.numBeads = numBeads;
-    this.beadsPerRow = beadsPerRow;
-    this.beadInitialVerticalPosition = beadInitialVerticalPosition;
-    this.beadVerticalStep = beadVerticalStep;
-    this.beadHorizontalStep = beadHorizontalStep;
+  constructor(parameters, two_d_parameters) {
+    this.parameters = parameters;
+    this.two_d_parameters = two_d_parameters;
     this.threads = [];
 
-    this.add_threads(numThreads);
+    this.set_threads(this.parameters.num_threads);
+  }
+
+  get numThreads() { return this.parameters.num_threads; }
+  get numBeads()   { return this.parameters.num_beads; }
+
+  get beadsPerRow()                 { return this.two_d_parameters.beads_per_row; }
+  get beadInitialVerticalPosition() { return this.two_d_parameters.initial_vertical_position; }
+  get beadVerticalStep()            { return this.two_d_parameters.vertical_step; }
+  get beadHorizontalStep()          { return this.two_d_parameters.horizontal_step; }
+
+  set_threads(amount) {
+    this.remove_threads(this.parameters.num_threads);
+    this.add_threads(amount);
   }
 
   add_threads(amount) {
-    this.numThreads += amount;
+    this.parameters.num_threads += amount;
 
-    while (this.threads.length < this.numThreads) {
-      this.threads.push(new Thread(this.numBeads));
+    while (this.threads.length < this.parameters.num_threads) {
+      this.threads.push(new Thread(this.parameters.num_beads));
     }
   }
 
   remove_threads(amount) {
-    this.numThreads -= amount;
+    this.parameters.num_threads = Math.min(this.parameters.num_threads - amount, 0);
 
-    while (this.threads.length > this.numThreads) {
+    while (this.threads.length > this.parameters.num_threads) {
       this.threads.pop();
     }
   }
 
   set_beads(amount) {
-    this.numBeads = amount;
-    for (var i = 0; i < this.numThreads; i++) {
+    this.parameters.num_beads = amount;
+    for (var i = 0; i < this.parameters.num_threads; i++) {
       this.threads[i].set_beads(amount);
     }
   }
