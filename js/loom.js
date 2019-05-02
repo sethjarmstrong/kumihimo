@@ -75,5 +75,11 @@ class Loom {
     for (var i = this.groups.length / 2; i < this.groups.length; i++) {
       this.beads[1].push(this.groups[i].next_bead);
     }
+    for (var i = 0; i < this.groups.length / 2; i++) {
+      this.beads[1].push(this.groups[i].next_bead);
+    }
+    for (var i = this.groups.length / 2; i < this.groups.length; i++) {
+      this.beads[0].push(this.groups[i].next_bead);
+    }
   }
 }
