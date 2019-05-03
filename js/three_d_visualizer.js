@@ -57,26 +57,24 @@ class ThreeDVisualizer extends Visualizer {
 
     var xorigin = 0;
     var zorigin = 0;
-    var y = this.beads_per_row;
+    var y = 0;
 
     var positives = this.spirals.positives;
     var negatives = this.spirals.negatives;
 
     for (var i = 0; i < positives.length; i++) {
-      var angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.beads_per_row) % (this.beads_per_row * 2)));
-      var x = xorigin - this.radius * Math.cos(this.bead_angle(i % this.beads_per_row) + angle_offset);
-      var z = zorigin - this.radius * Math.sin(this.bead_angle(i % this.beads_per_row) + angle_offset);
+      var x = xorigin - this.radius * Math.cos(this.bead_angle(i));
+      var z = zorigin - this.radius * Math.sin(this.bead_angle(i));
       var bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
       y -= this.vertical_step * 2;
     }
 
-    y = this.beads_per_row;
+    y = 0;
     for (var i = 0; i < negatives.length; i++) {
-      angle_offset = -(this.bead_angle(1) / 2 * (Math.floor(i / this.beads_per_row) % (this.beads_per_row * 2)));
-      x = xorigin + this.radius * Math.cos(this.bead_angle(i % this.beads_per_row) + angle_offset);
-      z = zorigin + this.radius * Math.sin(this.bead_angle(i % this.beads_per_row) + angle_offset);
+      x = xorigin + this.radius * Math.cos(this.bead_angle(i));
+      z = zorigin + this.radius * Math.sin(this.bead_angle(i));
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
@@ -141,7 +139,8 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   bead_angle(bead_number) {
-    return -2 * Math.PI / this.beads_per_row * bead_number;
+    var bead_step = this.braid.three_d_parameters.bead_step;
+    return -2 * Math.PI * bead_step * bead_number / 360;
   }
 
   bead(bead, x, y, z) {
