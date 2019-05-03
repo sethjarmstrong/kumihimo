@@ -91,10 +91,10 @@
       'remove_threads',
       'bead_number',
       'bead_colour',
-      'beads_per_row',
-      'bead_initial_vertical_position',
-      'bead_vertical_step',
-      'bead_horizontal_step',
+      '2d_beads_per_row',
+      '2d_initial_vertical_position',
+      '2d_vertical_step',
+      '2d_horizontal_step',
       '3d_radius',
       '3d_bead_step',
       '3d_vertical_step',
@@ -105,10 +105,10 @@
       num_beads: parseInt(controls.bead_number.value, 10)
     };
     var two_d_parameters = {
-      beads_per_row: parseInt(controls.beads_per_row.value, 10),
-      initial_vertical_position: parseFloat(controls.bead_initial_vertical_position.value, 10),
-      vertical_step: parseFloat(controls.bead_vertical_step.value, 10),
-      horizontal_step: parseFloat(controls.bead_horizontal_step.value, 10)
+      beads_per_row: parseInt(controls['2d_beads_per_row'].value, 10),
+      initial_vertical_position: parseFloat(controls['2d_initial_vertical_position'].value, 10),
+      vertical_step: parseFloat(controls['2d_vertical_step'].value, 10),
+      horizontal_step: parseFloat(controls['2d_horizontal_step'].value, 10)
     };
     var three_d_parameters = {
       radius: parseFloat(controls['3d_radius'].value, 10),
