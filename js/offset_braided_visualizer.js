@@ -8,12 +8,12 @@ class OffsetBraidedVisualizer extends Visualizer {
   get rows() {
     var num_beads = this.braid.parameters.num_beads;
     var num_threads = this.braid.parameters.num_threads;
-    var beads_per_row = this.braid.two_d_parameters.beads_per_row;
+    var beads_per_row = num_threads / 2;
     return Math.ceil(num_beads * num_threads / beads_per_row + ((beads_per_row / 2) - 1) * 0.5);
   }
 
   get columns() {
-    return this.braid.two_d_parameters.beads_per_row;
+    return this.braid.parameters.num_threads / 2;
   }
 
   get width() {
@@ -43,26 +43,28 @@ class OffsetBraidedVisualizer extends Visualizer {
     var elements = [];
     var beads_to_wrap = 0;
     var this_ = this;
-    var beads_per_row = this.braid.two_d_parameters.beads_per_row;
+    var beads_per_row = this.braid.parameters.num_threads / 2;
     var initial_vertical_position = this.braid.two_d_parameters.initial_vertical_position;
     var vertical_step = this.braid.two_d_parameters.vertical_step;
     var horizontal_step = this.braid.two_d_parameters.horizontal_step;
 
-    var draw_spiral = function(dataset, vertical_offset, horizontal_offset) {
+    var draw_spiral = function(dataset, vertical_offset, horizontal_offset, initially_indented) {
+      var indentation_mask = initially_indented ? 1 : 0;
       var results = [];
       for (var i = 0; i < dataset.length; i++) {
         var row = dataset.slice(i * beads_per_row / 2, (i + 1) * beads_per_row / 2);
         for (var j = 0; j < row.length; j++) {
           var y = vertical_offset + (this_.row_height * i + j * vertical_step * this_.row_height + this_.row_mid) + '%';
-          var x = horizontal_offset + this_.px_per_bead * j * horizontal_step + this_.px_per_bead / 2 + (i % 2 === 0 ? this_.px_per_bead / 2 : 0);
+          var x = horizontal_offset * indentation_mask + this_.px_per_bead * j * horizontal_step + this_.px_per_bead / 2 + (i % 2 === 0 ? this_.px_per_bead / 2 : 0);
           results.push(this_.bead_svg(row[j], x, y));
         }
+        indentation_mask = (indentation_mask + 1) % 2;
       }
       return results;
     };
 
-    elements = elements.concat(draw_spiral(this.beads.positives, initial_vertical_position, 0));
-    elements = elements.concat(draw_spiral(this.beads.negatives, initial_vertical_position, horizontal_step * this.px_per_bead * beads_per_row / 2));
+    elements = elements.concat(draw_spiral(this.beads.positives, initial_vertical_position, horizontal_step * this.px_per_bead * beads_per_row / 2, false));
+    elements = elements.concat(draw_spiral(this.beads.negatives, initial_vertical_position, horizontal_step * this.px_per_bead * beads_per_row / 2, true));
 
     return elements;
   }

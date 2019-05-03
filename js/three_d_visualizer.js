@@ -13,10 +13,6 @@ class ThreeDVisualizer extends Visualizer {
     return { positives: this.loom.beads[0], negatives: this.loom.beads[1] };
   }
 
-  get beads_per_row() {
-    return this.braid.two_d_parameters.beads_per_row - 0.5;
-  }
-
   get radius() {
     return this.braid.three_d_parameters.radius;
   }

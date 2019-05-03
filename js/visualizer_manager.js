@@ -6,7 +6,6 @@ class VisualizerManager {
     this.number_of_beads_element = controls.bead_number;
     this.colour_picker_element = controls.bead_colour;
 
-    this.two_d_beads_per_row_element = controls['2d_beads_per_row'];
     this.two_d_initial_vertical_position_element = controls['2d_initial_vertical_position'];
     this.two_d_vertical_step_element = controls['2d_vertical_step'];
     this.two_d_horizontal_step_element = controls['2d_horizontal_step'];
@@ -46,11 +45,6 @@ class VisualizerManager {
 
   setup_two_d_parameters_listener() {
     var this_ = this;
-    this.two_d_beads_per_row_element.addEventListener('change', function() {
-      this_.braid.two_d_parameters.beads_per_row = parseInt(this_.two_d_beads_per_row_element.value, 10);
-      this_.render();
-    });
-
     this.two_d_initial_vertical_position_element.addEventListener('change', function() {
       this_.braid.two_d_parameters.initial_vertical_position = parseFloat(this_.two_d_initial_vertical_position_element.value, 10);
       this_.render();
