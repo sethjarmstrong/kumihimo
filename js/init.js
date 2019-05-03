@@ -12,25 +12,11 @@
       type: 'row',
       content: [
         {
-          title: 'Unbraided View',
-          type: 'component',
-          componentName: 'unbraided-visualizer',
-          componentState: {}
-        },
-        /*
-        {
           title: '2D Braided View',
           type: 'component',
           componentName: '2d-braided-visualizer',
           componentState: {}
         },
-        {
-          title: 'Offset 2D Braided View',
-          type: 'component',
-          componentName: 'offset-2d-braided-visualizer',
-          componentState: {}
-        },
-        */
         {
           title: '3D Braided View',
           type: 'component',
@@ -132,7 +118,6 @@
     }
 
     layout.registerComponent('2d-braided-visualizer', registration_function(BraidedVisualizer));
-    layout.registerComponent('offset-2d-braided-visualizer', registration_function(OffsetBraidedVisualizer));
     layout.registerComponent('3d-braided-visualizer', registration_function(ThreeDVisualizer));
     layout.registerComponent('unbraided-visualizer', registration_function(UnbraidedVisualizer));
     layout.registerComponent('stringing-visualizer', registration_function(StringingVisualizer));
@@ -155,7 +140,6 @@
     };
 
     add_menu_item('2d-braided-visualizer', '2D Braided View');
-    add_menu_item('offset-2d-braided-visualizer', 'Offset 2D Braided View');
     add_menu_item('3d-braided-visualizer', '3D Braided View');
     add_menu_item('unbraided-visualizer', 'Unbraided View');
     add_menu_item('stringing-visualizer', 'Stringing Guide (Colours)');
