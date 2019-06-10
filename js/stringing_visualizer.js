@@ -1,6 +1,7 @@
 class StringingVisualizer extends Visualizer {
   elements() {
     var elements = [];
+    elements.push(this.totals_element());
     for (var i = 0; i < this.braid.threads.length; i++) {
       elements.push(this.thread_element(this.braid.threads[i], i + 1));
     }
@@ -40,6 +41,36 @@ class StringingVisualizer extends Visualizer {
     colour_descriptor.appendChild(count_indicator);
 
     return colour_descriptor;
+  }
+
+  totals_element() {
+    function pluralize(string, amount) {
+      return (Math.abs(amount) > 1 ? string + 's' : string);
+    }
+
+    var colours = this.colour_totals();
+    var colour_strings = [];
+
+    for (var colour in colours) {
+      colour_strings.push(colours[colour] + ' ' + ntc.name(colour).name + ' ' + pluralize('bead', colours[colour]));
+    }
+
+    var container = document.createElement('div');
+    container.setAttribute('class', 'stringing_row');
+    container.appendChild(document.createTextNode(colour_strings.join(', ')));
+    return container;
+  }
+
+  colour_totals() {
+    var colours = {};
+    for (var i = 0; i < this.braid.threads.length; i++) {
+      for (var j = 0; j < this.braid.threads[i].beads.length; j++) {
+        var bead = this.braid.threads[i].beads[j];
+        if (!(bead.colour in colours)) { colours[bead.colour] = 0; }
+        colours[bead.colour]++;
+      }
+    }
+    return colours;
   }
 
   thread_element(thread, number) {

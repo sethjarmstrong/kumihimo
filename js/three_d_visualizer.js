@@ -22,7 +22,11 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   get vertical_step() {
-    return this.braid.three_d_parameters.vertical_step;
+    // The vertical step is meant to be the amount that we move down with each
+    // bead, in terms of a percentage of bead height. Since the radius of each
+    // bead is 1, the total height of any given bead is 2, and we can convert
+    // the step percentage into a measurement by doubling it.
+    return this.braid.three_d_parameters.vertical_step * 2;
   }
 
   get all_parameters() {
@@ -64,7 +68,7 @@ class ThreeDVisualizer extends Visualizer {
       var bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      y -= this.vertical_step * 2;
+      y -= this.vertical_step;
     }
 
     y = 0;
@@ -74,7 +78,7 @@ class ThreeDVisualizer extends Visualizer {
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      y -= this.vertical_step * 2;
+      y -= this.vertical_step;
     }
 
     this.cached_parameters = this.all_parameters;
@@ -184,7 +188,7 @@ class ThreeDVisualizer extends Visualizer {
 
   _create_renderer() {
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(this.element.clientWidth, this.element.clientHeight);
+    this.renderer.setSize(this.cached_width, this.cached_height);
     this.element.appendChild(this.renderer.domElement);
   }
 
