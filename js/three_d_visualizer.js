@@ -85,11 +85,10 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   resize() {
-    this.cached_width = this.element.clientWidth;
-    this.cached_height = this.element.clientHeight;
-    this.camera.aspect = this.cached_width / this.cached_height;
+    this._set_visualization_size();
+    this.camera.aspect = this.viewport_size.width / this.viewport_size.height;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.cached_width, this.cached_height);
+    this.renderer.setSize(this.viewport_size.width, this.viewport_size.height);
   }
 
   colour_render() {
@@ -155,7 +154,7 @@ class ThreeDVisualizer extends Visualizer {
       return;
     }
 
-    this._set_viewport_size();
+    this._set_visualization_size();
     this._create_scene();
     this._create_camera();
     this._create_light();
@@ -165,7 +164,14 @@ class ThreeDVisualizer extends Visualizer {
     this._animate();
   }
 
-  _set_viewport_size() {
+  get viewport_size() {
+    return {
+      width: this.element.clientWidth,
+      height: this.element.clientHeight - 240
+    };
+  }
+
+  _set_visualization_size() {
     this.cached_width = this.element.clientWidth;
     this.cached_height = this.element.clientHeight;
   }
@@ -176,7 +182,7 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   _create_camera() {
-    this.camera = new THREE.PerspectiveCamera(75, this.element.clientWidth / this.element.clientHeight, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(75, this.viewport_size.width / this.viewport_size.height, 0.1, 1000);
     this.camera.position.set(0, 0, 50);
     this.camera.lookAt(0, 0, 0);
   }
@@ -188,13 +194,37 @@ class ThreeDVisualizer extends Visualizer {
 
   _create_renderer() {
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(this.cached_width, this.cached_height);
+    this.renderer.setSize(this.viewport_size.width, this.viewport_size.height);
     this.element.appendChild(this.renderer.domElement);
   }
 
   _create_controls() {
     var controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
     controls.enablePan = false;
+
+    function button_control(direction, size, kind) {
+      var button = document.createElement('i');
+      button.setAttribute('class', ['fas', 'fa-' + size, 'clickable', direction, kind + direction].join(' '));
+      return button;
+    }
+
+    function arrow_control(direction) {
+      return button_control(direction, '5x', 'fa-chevron-');
+    }
+
+    function zoom_control(direction) {
+      return button_control(direction, '2x', 'fa-');
+    }
+
+    var buttons_container = document.createElement('div');
+    buttons_container.setAttribute('class', 'movement-buttons');
+    buttons_container.appendChild(arrow_control('left'));
+    buttons_container.appendChild(arrow_control('up'));
+    buttons_container.appendChild(arrow_control('down'));
+    buttons_container.appendChild(arrow_control('right'));
+    buttons_container.appendChild(zoom_control('plus'));
+    buttons_container.appendChild(zoom_control('minus'));
+    this.element.appendChild(buttons_container);
   }
 
   _create_geometry() {

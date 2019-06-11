@@ -22,6 +22,10 @@ td {
     clear: left;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 h2 {
     font: 14px Arial, sans-serif;
     color:#777;
@@ -83,4 +87,55 @@ body .lm_content {
     top: 0;
     left: 20%;
     box-shadow: -3px 0px 9px 0px rgba( 0, 0, 0, 0.4 );
+}
+
+.movement-buttons {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+    grid-template-rows: 2fr 1fr 1fr 2fr;
+    width: 240px;
+    margin: auto;
+    color: #777;
+}
+
+.movement-buttons .up {
+    grid-column-start: 2;
+    grid-column-end: span 2;
+    grid-row-start: 1;
+    margin: auto;
+}
+
+.movement-buttons .down {
+    grid-column-start: 2;
+    grid-column-end: span 2;
+    grid-row-start: 4;
+    margin: auto;
+}
+
+.movement-buttons .left {
+    grid-column-start: 1;
+    grid-row-start: 2;
+    grid-row-end: span 2;
+    margin: auto;
+}
+
+.movement-buttons .right {
+    grid-column-start: 4;
+    grid-row-start: 2;
+    grid-row-end: span 2;
+    margin: auto;
+}
+
+.movement-buttons .plus {
+    grid-column-start: 2;
+    grid-column-end: span 2;
+    grid-row-start: 2;
+    margin: auto;
+}
+
+.movement-buttons .minus {
+    grid-column-start: 2;
+    grid-column-end: span 2;
+    grid-row-start: 3;
+    margin: auto;
 }
