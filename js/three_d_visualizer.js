@@ -29,6 +29,14 @@ class ThreeDVisualizer extends Visualizer {
     return this.braid.three_d_parameters.vertical_step * 2;
   }
 
+  get rotation_step() {
+    return this.bead_step;
+  }
+
+  get pan_step() {
+    return this.vertical_step * 4;
+  }
+
   get all_parameters() {
     return Object.assign(
       Object.assign({}, this.braid.parameters),
@@ -134,6 +142,7 @@ class ThreeDVisualizer extends Visualizer {
     this.light = null;
     this.renderer = null;
 
+    this.controls.destroy();
     super.destroy();
   }
 
@@ -181,9 +190,11 @@ class ThreeDVisualizer extends Visualizer {
     this.scene.background = new THREE.Color(0xe1e1e1);
   }
 
+  get camera_radius() { return 50; }
+
   _create_camera() {
     this.camera = new THREE.PerspectiveCamera(75, this.viewport_size.width / this.viewport_size.height, 0.1, 1000);
-    this.camera.position.set(0, 0, 50);
+    this.camera.position.set(this.camera_radius, 0, 0);
     this.camera.lookAt(0, 0, 0);
   }
 
@@ -199,9 +210,6 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   _create_controls() {
-    var controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-    controls.enablePan = false;
-
     function button_control(direction, size, kind) {
       var button = document.createElement('i');
       button.setAttribute('class', ['fas', 'fa-' + size, 'clickable', direction, kind + direction].join(' '));
@@ -218,13 +226,22 @@ class ThreeDVisualizer extends Visualizer {
 
     var buttons_container = document.createElement('div');
     buttons_container.setAttribute('class', 'movement-buttons');
-    buttons_container.appendChild(arrow_control('left'));
-    buttons_container.appendChild(arrow_control('up'));
-    buttons_container.appendChild(arrow_control('down'));
-    buttons_container.appendChild(arrow_control('right'));
-    buttons_container.appendChild(zoom_control('plus'));
-    buttons_container.appendChild(zoom_control('minus'));
+
+    this.left_button = arrow_control('left');
+    this.right_button = arrow_control('right');
+    this.up_button = arrow_control('up');
+    this.down_button = arrow_control('down');
+    this.zoom_in_button = zoom_control('plus');
+    this.zoom_out_button = zoom_control('minus');
+
+    buttons_container.appendChild(this.left_button);
+    buttons_container.appendChild(this.up_button);
+    buttons_container.appendChild(this.down_button);
+    buttons_container.appendChild(this.right_button);
+    buttons_container.appendChild(this.zoom_in_button);
+    buttons_container.appendChild(this.zoom_out_button);
     this.element.appendChild(buttons_container);
+    this.controls = new ThreeDControls(this);
   }
 
   _create_geometry() {
@@ -240,4 +257,91 @@ class ThreeDVisualizer extends Visualizer {
 
     animate();
   }
+}
+
+class ThreeDControls {
+  /*
+    The bead step could be used as the amount to rotate the camera left and
+    right by, while the vertical step could be used as the amount to move the
+    camera up and down by (probably quadrupled to make the amount more
+    reasonable). That should keep the camera always focused on a bead.
+  */
+
+  constructor(visualizer) {
+    this.visualizer = visualizer;
+    this.radius = visualizer.camera_radius;
+    this.angle = 0;
+
+    this.functions = {
+      rotate_left: this.rotate_left(),
+      rotate_right: this.rotate_right(),
+      pan_up: this.pan_up(),
+      pan_down: this.pan_down(),
+      zoom_in: this.zoom_in(),
+      zoom_out: this.zoom_out()
+    };
+
+    visualizer.left_button.addEventListener('click', this.functions.rotate_left);
+    visualizer.right_button.addEventListener('click', this.functions.rotate_right);
+    visualizer.up_button.addEventListener('click', this.functions.pan_up);
+    visualizer.down_button.addEventListener('click', this.functions.pan_down);
+    visualizer.zoom_in_button.addEventListener('click', this.functions.zoom_in);
+    visualizer.zoom_out_button.addEventListener('click', this.functions.zoom_out);
+  }
+
+  destroy () {
+    this.visualizer.left_button.removeEventListener('click', this.functions.rotate_left);
+    this.visualizer.right_button.removeEventListener('click', this.functions.rotate_right);
+    this.visualizer.up_button.removeEventListener('click', this.functions.pan_up);
+    this.visualizer.down_button.removeEventListener('click', this.functions.pan_down);
+    this.visualizer.zoom_in_button.removeEventListener('click', this.functions.zoom_in);
+    this.visualizer.zoom_out_button.removeEventListener('click', this.functions.zoom_out);
+  }
+
+  rotate(amount) {
+    var this_ = this;
+    return function() {
+      this_.add_angle(amount);
+      var x = this_.radius * Math.cos(this_.rotation_angle);
+      var z = this_.radius * Math.sin(this_.rotation_angle);
+      this_.camera.position.set(x, this_.camera.position.y, z);
+      this_.camera.lookAt(0, this_.camera.position.y, 0);
+    };
+  }
+  rotate_left() { return this.rotate(-this.rotation_step); }
+  rotate_right() { return this.rotate(this.rotation_step); }
+
+  pan(amount) {
+    var this_ = this;
+    return function() {
+      var v = new THREE.Vector3(0, amount, 0);
+      v.multiplyScalar(this_.pan_step);
+      this_.camera.position.add(v);
+    };
+  }
+  pan_up() { return this.pan(1); }
+  pan_down() { return this.pan(-1); }
+
+  zoom(amount) {
+    var this_ = this;
+    return function() {
+      this_.radius += amount;
+      this_.radius = Math.max(this_.radius, 10);
+      this_.radius = Math.min(this_.radius, this_.visualizer.camera_radius);
+      this_.rotate(0)();
+    };
+  }
+  zoom_in() { return this.zoom(-5); }
+  zoom_out() { return this.zoom(5); }
+
+  get rotation_angle() { return 2 * Math.PI * this.angle / 360; }
+  add_angle(amount) {
+    this.angle += amount;
+    if (this.angle < 0) { this.angle += 360; }
+    if (this.angle >= 360) { this.angle -= 360; }
+  }
+
+  get camera() { return this.visualizer.camera; }
+  get rotation_step() { return this.visualizer.rotation_step; }
+  get pan_step() { return this.visualizer.pan_step; }
 }
