@@ -100,7 +100,7 @@
       vertical_step: parseFloat(controls['3d_vertical_step'].value, 10)
     };
     var braid = new Braid(parameters, two_d_parameters, three_d_parameters);
-    braid.load_demo();
+    //braid.load_demo();
 
     var manager = new VisualizerManager(braid, controls);
 
@@ -108,7 +108,7 @@
 
     function registration_function(visualization_class) {
       return function(container, state) {
-        var visualizer = new visualization_class(braid, container.getElement().get(0));
+        var visualizer = new visualization_class(braid, container.getElement().get(0), controls);
         manager.register_visualizer(visualizer);
         container.on('destroy', function(container) { manager.deregister_visualizer(visualizer); });
         container.on('resize', function(container) { manager.render(); });

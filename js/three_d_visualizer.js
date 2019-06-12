@@ -1,6 +1,6 @@
 class ThreeDVisualizer extends Visualizer {
-  constructor(braid, element) {
-    super(braid, element);
+  constructor(braid, element, control_elements) {
+    super(braid, element, control_elements);
     this.loom = new Loom(this.braid);
     this.beads = [];
     this.cached_parameters = {};
@@ -155,6 +155,7 @@ class ThreeDVisualizer extends Visualizer {
     var material = new THREE.MeshBasicMaterial({ color: bead.colour });
     var mesh = new THREE.Mesh(this.geometry, material);
     mesh.position.set(x, y, z);
+    mesh.bead = bead;
     return { bead: bead, mesh: mesh};
   }
 
@@ -199,7 +200,7 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   _create_light() {
-    this.light = new THREE.PointLight( 0xffffff, 0.8 );
+    this.light = new THREE.PointLight(0xffffff, 0.8);
     this.camera.add(this.light);
   }
 
@@ -278,7 +279,8 @@ class ThreeDControls {
       pan_up: this.pan_up(),
       pan_down: this.pan_down(),
       zoom_in: this.zoom_in(),
-      zoom_out: this.zoom_out()
+      zoom_out: this.zoom_out(),
+      draw: this.draw()
     };
 
     visualizer.left_button.addEventListener('click', this.functions.rotate_left);
@@ -287,6 +289,7 @@ class ThreeDControls {
     visualizer.down_button.addEventListener('click', this.functions.pan_down);
     visualizer.zoom_in_button.addEventListener('click', this.functions.zoom_in);
     visualizer.zoom_out_button.addEventListener('click', this.functions.zoom_out);
+    visualizer.renderer.domElement.addEventListener('click', this.functions.draw);
   }
 
   destroy () {
@@ -296,6 +299,7 @@ class ThreeDControls {
     this.visualizer.down_button.removeEventListener('click', this.functions.pan_down);
     this.visualizer.zoom_in_button.removeEventListener('click', this.functions.zoom_in);
     this.visualizer.zoom_out_button.removeEventListener('click', this.functions.zoom_out);
+    visualizer.renderer.domElement.removeEventListener('click', this.functions.draw);
   }
 
   rotate(amount) {
@@ -334,6 +338,28 @@ class ThreeDControls {
   zoom_in() { return this.zoom(-5); }
   zoom_out() { return this.zoom(5); }
 
+  draw() {
+    var this_ = this;
+    var raycaster = new THREE.Raycaster();
+    var mouse_position = new THREE.Vector2();
+
+    return function(event) {
+      mouse_position.x = (event.offsetX / this_.visualizer.viewport_size.width) * 2 - 1;
+      mouse_position.y = -(event.offsetY / this_.visualizer.viewport_size.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse_position, this_.camera);
+
+      var intersects = raycaster.intersectObjects(this_.visualizer.scene.children);
+
+      if (intersects.length > 0) {
+        intersects[0].object.bead.colour = this_.colour;
+        this_.visualizer.manager.render();
+      }
+    };
+  }
+
+  // Utility methods
+
   get rotation_angle() { return 2 * Math.PI * this.angle / 360; }
   add_angle(amount) {
     this.angle += amount;
@@ -344,4 +370,6 @@ class ThreeDControls {
   get camera() { return this.visualizer.camera; }
   get rotation_step() { return this.visualizer.rotation_step; }
   get pan_step() { return this.visualizer.pan_step; }
+
+  get colour() { return this.visualizer.control_elements.bead_colour.value; }
 }

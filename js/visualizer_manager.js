@@ -81,6 +81,7 @@ class VisualizerManager {
 
   register_visualizer(visualizer) {
     this.visualizers.push(visualizer);
+    visualizer.manager = this;
   }
 
   deregister_visualizer(visualizer) {

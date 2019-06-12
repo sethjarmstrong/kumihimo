@@ -1,7 +1,8 @@
 class Visualizer {
-  constructor(braid, element) {
+  constructor(braid, element, control_elements) {
     this.braid = braid;
     this.element = element;
+    this.control_elements = control_elements;
     this.px_per_bead = 20;
     this.bead_radius = 8;
     this.bead_svgs = [];
