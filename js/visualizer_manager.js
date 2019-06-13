@@ -10,47 +10,45 @@ class VisualizerManager {
   }
 
   setup_parameters_listener() {
-    var this_  = this;
     this.controls.add_threads.addEventListener('click', function() {
-      if (this_.braid.parameters.num_threads <= 28) {
-        this_.braid.add_threads(4);
+      if (this.braid.parameters.num_threads <= 28) {
+        this.braid.add_threads(4);
+        this.render();
       }
-      this_.render();
-    });
+    }.bind(this));
 
     this.controls.remove_threads.addEventListener('click', function() {
-      if (this_.braid.parameters.num_threads > 4) {
-        this_.braid.remove_threads(4);
+      if (this.braid.parameters.num_threads > 4) {
+        this.braid.remove_threads(4);
+        this.render();
       }
-      this_.render();
-    });
+    }.bind(this));
 
     this.controls.bead_number.addEventListener('change', function() {
-      if (this_.controls.bead_location_top.checked) {
-        this_.braid.set_beads_from_the_top(parseInt(this_.controls.bead_number.value, 10));
-      } else if (this_.controls.bead_location_bottom.checked) {
-        this_.braid.set_beads_from_the_bottom(parseInt(this_.controls.bead_number.value, 10));
+      if (this.controls.bead_location_top.checked) {
+        this.braid.set_beads_from_the_top(parseInt(this.controls.bead_number.value, 10));
+      } else if (this.controls.bead_location_bottom.checked) {
+        this.braid.set_beads_from_the_bottom(parseInt(this.controls.bead_number.value, 10));
       }
-      this_.render();
-    });
+      this.render();
+    }.bind(this));
   }
 
   setup_three_d_parameters_listener() {
-    var this_ = this;
     this.controls['3d_radius'].addEventListener('change', function() {
-      this_.braid.three_d_parameters.radius = parseFloat(this_.controls['3d_radius'].value, 10);
-      this_.render();
-    });
+      this.braid.three_d_parameters.radius = parseFloat(this.controls['3d_radius'].value, 10);
+      this.render();
+    }.bind(this));
 
     this.controls['3d_bead_step'].addEventListener('change', function() {
-      this_.braid.three_d_parameters.bead_step = parseFloat(this_.controls['3d_bead_step'].value, 10);
-      this_.render();
-    });
+      this.braid.three_d_parameters.bead_step = parseFloat(this.controls['3d_bead_step'].value, 10);
+      this.render();
+    }.bind(this));
 
     this.controls['3d_vertical_step'].addEventListener('change', function() {
-      this_.braid.three_d_parameters.vertical_step = parseFloat(this_.controls['3d_vertical_step'].value, 10);
-      this_.render();
-    });
+      this.braid.three_d_parameters.vertical_step = parseFloat(this.controls['3d_vertical_step'].value, 10);
+      this.render();
+    }.bind(this));
   }
 
   register_visualizer(visualizer) {
@@ -76,11 +74,10 @@ class VisualizerManager {
   }
 
   add_listeners(visualizer) {
-    var this_ = this;
-    function update_colour(bead_svg) {
-      bead_svg.bead.colour = this_.controls.bead_colour.value;
-      this_.render();
-    }
+    var update_colour = function(bead_svg) {
+      bead_svg.bead.colour = this.controls.bead_colour.value;
+      this.render();
+    }.bind(this);
 
     visualizer.bead_svgs.forEach(function(bead_svg) {
       bead_svg.element.addEventListener('mousemove', function(event) {

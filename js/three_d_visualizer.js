@@ -262,11 +262,10 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   _animate() {
-    var this_ = this;
-    function animate() {
-      this_.id = requestAnimationFrame(animate);
-      this_.renderer.render(this_.scene, this_.camera);
-    }
+    var animate = function () {
+      this.id = requestAnimationFrame(animate);
+      this.renderer.render(this.scene, this.camera);
+    }.bind(this);
 
     animate();
   }
@@ -315,59 +314,55 @@ class ThreeDControls {
   }
 
   rotate(amount) {
-    var this_ = this;
     return function() {
-      this_.add_angle(amount);
-      var x = this_.radius * Math.cos(this_.rotation_angle);
-      var z = this_.radius * Math.sin(this_.rotation_angle);
-      this_.camera.position.set(x, this_.camera.position.y, z);
-      this_.camera.lookAt(0, this_.camera.position.y, 0);
-    };
+      this.add_angle(amount);
+      var x = this.radius * Math.cos(this.rotation_angle);
+      var z = this.radius * Math.sin(this.rotation_angle);
+      this.camera.position.set(x, this.camera.position.y, z);
+      this.camera.lookAt(0, this.camera.position.y, 0);
+    }.bind(this);
   }
   rotate_left() { return this.rotate(this.rotation_step); }
   rotate_right() { return this.rotate(-this.rotation_step); }
 
   pan(amount) {
-    var this_ = this;
     return function() {
       var v = new THREE.Vector3(0, amount, 0);
-      v.multiplyScalar(this_.pan_step);
-      this_.camera.position.add(v);
-    };
+      v.multiplyScalar(this.pan_step);
+      this.camera.position.add(v);
+    }.bind(this);
   }
   pan_up() { return this.pan(1); }
   pan_down() { return this.pan(-1); }
 
   zoom(amount) {
-    var this_ = this;
     return function() {
-      this_.radius += amount;
-      this_.radius = Math.max(this_.radius, 10);
-      this_.radius = Math.min(this_.radius, this_.visualizer.camera_radius * 2);
-      this_.rotate(0)();
-    };
+      this.radius += amount;
+      this.radius = Math.max(this.radius, 10);
+      this.radius = Math.min(this.radius, this.visualizer.camera_radius * 2);
+      this.rotate(0)();
+    }.bind(this);
   }
   zoom_in() { return this.zoom(-5); }
   zoom_out() { return this.zoom(5); }
 
   draw() {
-    var this_ = this;
     var raycaster = new THREE.Raycaster();
     var mouse_position = new THREE.Vector2();
 
     return function(event) {
-      mouse_position.x = (event.offsetX / this_.visualizer.viewport_size.width) * 2 - 1;
-      mouse_position.y = -(event.offsetY / this_.visualizer.viewport_size.height) * 2 + 1;
+      mouse_position.x = (event.offsetX / this.visualizer.viewport_size.width) * 2 - 1;
+      mouse_position.y = -(event.offsetY / this.visualizer.viewport_size.height) * 2 + 1;
 
-      raycaster.setFromCamera(mouse_position, this_.camera);
+      raycaster.setFromCamera(mouse_position, this.camera);
 
-      var intersects = raycaster.intersectObjects(this_.visualizer.scene.children);
+      var intersects = raycaster.intersectObjects(this.visualizer.scene.children);
 
       if (intersects.length > 0) {
-        intersects[0].object.bead.colour = this_.colour;
-        this_.visualizer.manager.render();
+        intersects[0].object.bead.colour = this.colour;
+        this.visualizer.manager.render();
       }
-    };
+    }.bind(this);
   }
 
   // Utility methods
