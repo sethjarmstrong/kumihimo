@@ -41,7 +41,7 @@ class VisualizerManager {
 
     this.number_of_beads_element.addEventListener('change', function() {
       if (this_.bead_location_top_element.checked) {
-         this_.braid.set_beads_from_the_top(parseInt(this_.number_of_beads_element.value, 10));
+        this_.braid.set_beads_from_the_top(parseInt(this_.number_of_beads_element.value, 10));
       } else if (this_.bead_location_bottom_element.checked) {
         this_.braid.set_beads_from_the_bottom(parseInt(this_.number_of_beads_element.value, 10));
       }
