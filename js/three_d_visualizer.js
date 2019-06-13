@@ -201,7 +201,7 @@ class ThreeDVisualizer extends Visualizer {
     this.scene.background = new THREE.Color(0xe1e1e1);
   }
 
-  get camera_radius() { return 50; }
+  get camera_radius() { return 25; }
 
   _create_camera() {
     this.camera = new THREE.PerspectiveCamera(75, this.viewport_size.width / this.viewport_size.height, 0.1, 1000);
@@ -341,7 +341,7 @@ class ThreeDControls {
     return function() {
       this_.radius += amount;
       this_.radius = Math.max(this_.radius, 10);
-      this_.radius = Math.min(this_.radius, this_.visualizer.camera_radius);
+      this_.radius = Math.min(this_.radius, this_.visualizer.camera_radius * 2);
       this_.rotate(0)();
     };
   }
