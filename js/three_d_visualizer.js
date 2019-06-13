@@ -58,10 +58,7 @@ class ThreeDVisualizer extends Visualizer {
     }
 
     this.loom.weave();
-
-    while(this.beads.length !== 0) {
-      this.scene.remove(this.beads.pop().mesh);
-    }
+    this.remove_beads_from_scene();
 
     var xorigin = 0;
     var zorigin = 0;
@@ -127,16 +124,21 @@ class ThreeDVisualizer extends Visualizer {
     return false;
   }
 
+  remove_beads_from_scene() {
+    while(this.beads.length !== 0) {
+      var bead_to_remove = this.beads.pop();
+      this.scene.remove(bead_to_remove.mesh);
+      this.scene.remove(bead_to_remove.outline_mesh);
+    }
+  }
+
   destroy() {
     if (this.scene === null) {
       return;
     }
 
     cancelAnimationFrame(this.id);
-
-    while(this.beads.length !== 0) {
-      this.scene.remove(this.beads.pop().mesh);
-    }
+    this.remove_beads_from_scene();
 
     this.beads = null;
     this.scene = null;
