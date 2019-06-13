@@ -8,10 +8,6 @@ class VisualizerManager {
     this.bead_location_bottom_element = controls.bead_location_bottom;
     this.colour_picker_element = controls.bead_colour;
 
-    this.two_d_initial_vertical_position_element = controls['2d_initial_vertical_position'];
-    this.two_d_vertical_step_element = controls['2d_vertical_step'];
-    this.two_d_horizontal_step_element = controls['2d_horizontal_step'];
-
     this.three_d_radius_element = controls['3d_radius'];
     this.three_d_bead_step_element = controls['3d_bead_step'];
     this.three_d_vertical_step_element = controls['3d_vertical_step'];
@@ -19,7 +15,6 @@ class VisualizerManager {
     this.visualizers = [];
 
     this.setup_parameters_listener();
-    this.setup_two_d_parameters_listener();
     this.setup_three_d_parameters_listener();
   }
 
@@ -45,24 +40,6 @@ class VisualizerManager {
       } else if (this_.bead_location_bottom_element.checked) {
         this_.braid.set_beads_from_the_bottom(parseInt(this_.number_of_beads_element.value, 10));
       }
-      this_.render();
-    });
-  }
-
-  setup_two_d_parameters_listener() {
-    var this_ = this;
-    this.two_d_initial_vertical_position_element.addEventListener('change', function() {
-      this_.braid.two_d_parameters.initial_vertical_position = parseFloat(this_.two_d_initial_vertical_position_element.value, 10);
-      this_.render();
-    });
-
-    this.two_d_vertical_step_element.addEventListener('change', function() {
-      this_.braid.two_d_parameters.vertical_step = parseFloat(this_.two_d_vertical_step_element.value, 10);
-      this_.render();
-    });
-
-    this.two_d_horizontal_step_element.addEventListener('change', function() {
-      this_.braid.two_d_parameters.horizontal_step = parseFloat(this_.two_d_horizontal_step_element.value, 10);
       this_.render();
     });
   }

@@ -60,9 +60,8 @@ class Thread {
 }
 
 class Braid {
-  constructor(parameters, two_d_parameters, three_d_parameters) {
+  constructor(parameters, three_d_parameters) {
     this.parameters = parameters;
-    this.two_d_parameters = two_d_parameters;
     this.three_d_parameters = three_d_parameters;
     this.threads = [];
 
