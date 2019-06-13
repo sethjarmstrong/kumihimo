@@ -34,8 +34,19 @@
         </li>
 
         <li>
-          <label for="bead_number">Number of Beads</label>
-          <input id="bead_number" type="number" min="1" value="5" />
+          <div><strong>Bead Controls</strong></div>
+          <div>
+            <label for="bead_number">Number of Beads</label>
+            <input id="bead_number" type="number" min="1" value="5" />
+          </div>
+          <div>
+            <label for="bead_location_top">Add/Remove from the Top</label>
+            <input name="bead_location" id="bead_location_top" type="radio" value="top" />
+          </div>
+          <div>
+            <label for="bead_location_bottom">Add/Remove from the Bottom</label>
+            <input name="bead_location" id="bead_location_bottom" type="radio" value="bottom" checked="checked" />
+          </div>
         </li>
 
         <li>

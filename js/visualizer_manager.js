@@ -4,6 +4,8 @@ class VisualizerManager {
     this.add_threads_element = controls.add_threads;
     this.remove_threads_element = controls.remove_threads;
     this.number_of_beads_element = controls.bead_number;
+    this.bead_location_top_element = controls.bead_location_top;
+    this.bead_location_bottom_element = controls.bead_location_bottom;
     this.colour_picker_element = controls.bead_colour;
 
     this.two_d_initial_vertical_position_element = controls['2d_initial_vertical_position'];
@@ -38,7 +40,11 @@ class VisualizerManager {
     });
 
     this.number_of_beads_element.addEventListener('change', function() {
-      this_.braid.set_beads(parseInt(this_.number_of_beads_element.value, 10));
+      if (this_.bead_location_top_element.checked) {
+         this_.braid.set_beads_from_the_top(parseInt(this_.number_of_beads_element.value, 10));
+      } else if (this_.bead_location_bottom_element.checked) {
+        this_.braid.set_beads_from_the_bottom(parseInt(this_.number_of_beads_element.value, 10));
+      }
       this_.render();
     });
   }

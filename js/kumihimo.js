@@ -8,7 +8,7 @@ class Thread {
   constructor(num_beads) {
     this.beads = [];
     this.current_bead = 0;
-    this.set_beads(num_beads);
+    this.set_beads_from_the_bottom(num_beads);
   }
 
   change_colour(colour) {
@@ -24,22 +24,38 @@ class Thread {
     return this.beads[this.current_bead++];
   }
 
-  add_bead() {
+  add_bead_to_the_top() {
+    this.beads.unshift(new Bead());
+  }
+
+  add_bead_to_the_bottom() {
     this.beads.push(new Bead());
   }
 
-  remove_bead() {
+  remove_bead_from_the_top() {
+    this.beads.shift();
+  }
+
+  remove_bead_from_the_bottom() {
     this.beads.pop();
   }
 
-  set_beads(amount) {
+  set_beads(amount, removal_method, addition_method) {
     while (this.beads.length > amount) {
-      this.remove_bead();
+      removal_method.call(this);
     }
 
     while (this.beads.length < amount) {
-      this.add_bead();
+      addition_method.call(this);
     }
+  }
+
+  set_beads_from_the_top(amount) {
+    this.set_beads(amount, this.remove_bead_from_the_top, this.add_bead_to_the_top);
+  }
+
+  set_beads_from_the_bottom(amount) {
+    this.set_beads(amount, this.remove_bead_from_the_bottom, this.add_bead_to_the_bottom);
   }
 }
 
@@ -74,11 +90,19 @@ class Braid {
     }
   }
 
-  set_beads(amount) {
+  set_beads(amount, method) {
     this.parameters.num_beads = amount;
     for (var i = 0; i < this.parameters.num_threads; i++) {
-      this.threads[i].set_beads(amount);
+      method.call(this.threads[i], amount);
     }
+  }
+
+  set_beads_from_the_top(amount) {
+    this.set_beads(amount, this.threads[0].set_beads_from_the_top);
+  }
+
+  set_beads_from_the_bottom(amount) {
+    this.set_beads(amount, this.threads[0].set_beads_from_the_bottom);
   }
 
   reset_beading() {
@@ -89,7 +113,7 @@ class Braid {
 
   load_demo() {
     this.set_threads(12);
-    this.set_beads(5);
+    this.set_beads_from_the_bottom(5);
 
     var colours = {
        0: { 0: '#035fb2', 1: '#ffffff', 2: '#035fb2', 3: '#fef100', 4: '#ffffff' },

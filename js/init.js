@@ -76,6 +76,8 @@
       'add_threads',
       'remove_threads',
       'bead_number',
+      'bead_location_top',
+      'bead_location_bottom',
       'bead_colour',
       '2d_initial_vertical_position',
       '2d_vertical_step',
