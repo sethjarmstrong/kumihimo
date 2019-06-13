@@ -1,44 +1,35 @@
 class VisualizerManager {
   constructor(braid, controls) {
     this.braid = braid;
-    this.add_threads_element = controls.add_threads;
-    this.remove_threads_element = controls.remove_threads;
-    this.number_of_beads_element = controls.bead_number;
-    this.bead_location_top_element = controls.bead_location_top;
-    this.bead_location_bottom_element = controls.bead_location_bottom;
-    this.colour_picker_element = controls.bead_colour;
-
-    this.three_d_radius_element = controls['3d_radius'];
-    this.three_d_bead_step_element = controls['3d_bead_step'];
-    this.three_d_vertical_step_element = controls['3d_vertical_step'];
 
     this.visualizers = [];
 
+    this.controls = controls;
     this.setup_parameters_listener();
     this.setup_three_d_parameters_listener();
   }
 
   setup_parameters_listener() {
     var this_  = this;
-    this.add_threads_element.addEventListener('click', function() {
+    this.controls.add_threads.addEventListener('click', function() {
       if (this_.braid.parameters.num_threads <= 28) {
         this_.braid.add_threads(4);
       }
       this_.render();
     });
 
-    this.remove_threads_element.addEventListener('click', function() {
+    this.controls.remove_threads.addEventListener('click', function() {
       if (this_.braid.parameters.num_threads > 4) {
         this_.braid.remove_threads(4);
       }
       this_.render();
     });
 
-    this.number_of_beads_element.addEventListener('change', function() {
-      if (this_.bead_location_top_element.checked) {
-        this_.braid.set_beads_from_the_top(parseInt(this_.number_of_beads_element.value, 10));
-      } else if (this_.bead_location_bottom_element.checked) {
-        this_.braid.set_beads_from_the_bottom(parseInt(this_.number_of_beads_element.value, 10));
+    this.controls.bead_number.addEventListener('change', function() {
+      if (this_.controls.bead_location_top.checked) {
+        this_.braid.set_beads_from_the_top(parseInt(this_.controls.bead_number.value, 10));
+      } else if (this_.controls.bead_location_bottom.checked) {
+        this_.braid.set_beads_from_the_bottom(parseInt(this_.controls.bead_number.value, 10));
       }
       this_.render();
     });
@@ -46,18 +37,18 @@ class VisualizerManager {
 
   setup_three_d_parameters_listener() {
     var this_ = this;
-    this.three_d_radius_element.addEventListener('change', function() {
-      this_.braid.three_d_parameters.radius = parseFloat(this_.three_d_radius_element.value, 10);
+    this.controls['3d_radius'].addEventListener('change', function() {
+      this_.braid.three_d_parameters.radius = parseFloat(this_.controls['3d_radius'].value, 10);
       this_.render();
     });
 
-    this.three_d_bead_step_element.addEventListener('change', function() {
-      this_.braid.three_d_parameters.bead_step = parseFloat(this_.three_d_bead_step_element.value, 10);
+    this.controls['3d_bead_step'].addEventListener('change', function() {
+      this_.braid.three_d_parameters.bead_step = parseFloat(this_.controls['3d_bead_step'].value, 10);
       this_.render();
     });
 
-    this.three_d_vertical_step_element.addEventListener('change', function() {
-      this_.braid.three_d_parameters.vertical_step = parseFloat(this_.three_d_vertical_step_element.value, 10);
+    this.controls['3d_vertical_step'].addEventListener('change', function() {
+      this_.braid.three_d_parameters.vertical_step = parseFloat(this_.controls['3d_vertical_step'].value, 10);
       this_.render();
     });
   }
@@ -86,6 +77,11 @@ class VisualizerManager {
 
   add_listeners(visualizer) {
     var this_ = this;
+    function update_colour(bead_svg) {
+      bead_svg.bead.colour = this_.controls.bead_colour.value;
+      this_.render();
+    }
+
     visualizer.bead_svgs.forEach(function(bead_svg) {
       bead_svg.element.addEventListener('mousemove', function(event) {
         /*
@@ -94,15 +90,11 @@ class VisualizerManager {
           bits first, and then we can just check to see if the result is 1.
         */
         if (event.buttons & 1 === 1) {
-          bead_svg.bead.colour = this_.colour_picker_element.value;
-          this_.render();
+          update_colour(bead_svg);
         }
       });
 
-      bead_svg.element.addEventListener('click', function(event) {
-        bead_svg.bead.colour = this_.colour_picker_element.value;
-        this_.render();
-      });
+      bead_svg.element.addEventListener('click', function() { update_colour(bead_svg);});
     });
   }
 }
