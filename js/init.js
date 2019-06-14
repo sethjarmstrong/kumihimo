@@ -43,7 +43,7 @@
     document.getElementById('colour_name').value = get_current_colour().name;
   }
 
-  function init_colour_picker() {
+  function init_colour_picker(manager) {
     document.getElementById('bead_colour').addEventListener('change', get_colour_name);
     get_colour_name();
 
@@ -67,6 +67,8 @@
       } else {
         ntc.names.splice(colour.index + 1, 0, colour.raw);
       }
+
+      manager.render();
     });
   }
 
@@ -139,7 +141,7 @@
     add_menu_item('stringing-visualizer', 'Stringing Guide (Colours)');
     add_menu_item('printable-stringing-visualizer', 'Stringing Guide (Names)');
 
-    init_colour_picker();
+    init_colour_picker(manager);
   }
 
   window.addEventListener('load', init);
