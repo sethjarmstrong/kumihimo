@@ -359,7 +359,11 @@ class ThreeDControls {
       var intersects = raycaster.intersectObjects(this.visualizer.scene.children);
 
       if (intersects.length > 0) {
-        intersects[0].object.bead.colour = this.colour;
+        if (event.shiftKey) {
+          this.visualizer.braid.set_all_beads_of_colour_to(intersects[0].object.bead.colour, this.colour);
+        } else {
+          intersects[0].object.bead.colour = this.colour;
+        }
         this.visualizer.manager.record_history();
         this.visualizer.manager.render();
       }

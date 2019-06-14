@@ -113,9 +113,14 @@ class VisualizerManager {
   }
 
   add_listeners(visualizer) {
-    var update_colour = function(bead_svg) {
-      bead_svg.bead.colour = this.controls.bead_colour.value;
-      this.record_history();
+    var update_colour = function(event, bead_svg) {
+      if (event.shiftKey) {
+        this.braid.set_all_beads_of_colour_to(bead_svg.bead.colour, this.controls.bead_colour.value);
+      } else {
+        bead_svg.bead.colour = this.controls.bead_colour.value;
+      }
+
+        this.record_history();
       this.render();
     }.bind(this);
 
@@ -126,12 +131,10 @@ class VisualizerManager {
           Mask the buttons attribute with 0001 to flip all of the irrelevant
           bits first, and then we can just check to see if the result is 1.
         */
-        if (event.buttons & 1 === 1) {
-          update_colour(bead_svg);
-        }
+        if (event.buttons & 1 === 1) { update_colour(event, bead_svg); }
       });
 
-      bead_svg.element.addEventListener('click', function() { update_colour(bead_svg);});
+      bead_svg.element.addEventListener('click', function() { update_colour(event, bead_svg); });
     });
   }
 }

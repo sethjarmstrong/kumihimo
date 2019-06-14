@@ -128,6 +128,14 @@ class Braid {
     });
   }
 
+  set_all_beads_of_colour_to(target_colour, new_colour) {
+    this.threads.forEach(function(thread) {
+      thread.beads.forEach(function(bead) {
+        if (bead.colour === target_colour) { bead.colour = new_colour; }
+      });
+    });
+  }
+
   load_demo() {
     this.set_threads(12);
     this.set_beads_from_the_bottom(5);
