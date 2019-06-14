@@ -104,8 +104,8 @@ class ThreeDVisualizer extends Visualizer {
     });
   }
 
-  render() {
-    if (this.scene === null || this.parameters_changed) {
+  render(force_fresh_render) {
+    if (this.scene === null || this.parameters_changed || (force_fresh_render === true)) {
       this.fresh_render();
     } else if (this.cached_width !== this.element.clientWidth || this.cached_height !== this.element.clientHeight) {
       this.resize();
@@ -360,6 +360,7 @@ class ThreeDControls {
 
       if (intersects.length > 0) {
         intersects[0].object.bead.colour = this.colour;
+        this.visualizer.manager.record_history();
         this.visualizer.manager.render();
       }
     }.bind(this);

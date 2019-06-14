@@ -73,6 +73,8 @@
   function init() {
     var controls = {};
     [
+      'undo',
+      'redo',
       'add_threads',
       'remove_threads',
       'bead_number',

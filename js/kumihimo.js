@@ -68,6 +68,24 @@ class Braid {
     this.set_threads(this.parameters.num_threads);
   }
 
+  copy(other) {
+    this.parameters = Object.assign({}, other.parameters);
+    this.three_d_parameters = Object.assign({}, other.three_d_parameters);
+    this.set_threads(this.parameters.num_threads);
+
+    for (var i = 0; i < this.threads.length; i++) {
+      for (var j = 0; j < this.threads[i].beads.length; j++) {
+        this.threads[i].beads[j].colour = other.threads[i].beads[j].colour;
+      }
+    }
+  }
+
+  clone() {
+    var other = new Braid(this.parameters, this.three_d_parameters);
+    other.copy(this);
+    return other;
+  }
+
   set_threads(amount) {
     this.remove_threads(this.parameters.num_threads);
     this.add_threads(amount);

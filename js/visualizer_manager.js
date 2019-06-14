@@ -1,18 +1,55 @@
 class VisualizerManager {
   constructor(braid, controls) {
     this.braid = braid;
+    this.braid_history = [];
+    this.current_braid = -1;
+    this.max_history = 50;
+    this.record_history();
 
     this.visualizers = [];
 
     this.controls = controls;
+
+    this.setup_editing_controls_listener();
     this.setup_parameters_listener();
     this.setup_three_d_parameters_listener();
+  }
+
+  record_history() {
+    // If we're not pointing at the latest change, then we've gone back in time
+    // and then changed things. The future no longer holds, so delete it!
+    if (this.current_braid + 1 !== this.braid_history.length) { this.braid_history.length = this.current_braid + 1; }
+
+    // We only want to record so much, so purge the oldest record.
+    if (this.braid_history.length === this.max_history) { this.braid_history.shift(); }
+    this.braid_history.push(this.braid.clone());
+    this.current_braid = Math.min(this.current_braid + 1, this.max_history - 1);
+  }
+
+  rollback() {
+    if (this.current_braid === 0) { return; }
+    this.current_braid = Math.max(this.current_braid - 1, 0);
+    this.braid.copy(this.braid_history[this.current_braid]);
+    this.render(true);
+  }
+
+  rollforward() {
+    if (this.current_braid === this.braid_history.length - 1) { return; }
+    this.current_braid = Math.min(this.current_braid + 1, this.braid_history.length - 1);
+    this.braid.copy(this.braid_history[this.current_braid]);
+    this.render(true);
+  }
+
+  setup_editing_controls_listener() {
+    this.controls.undo.addEventListener('click', this.rollback.bind(this));
+    this.controls.redo.addEventListener('click', this.rollforward.bind(this));
   }
 
   setup_parameters_listener() {
     this.controls.add_threads.addEventListener('click', function() {
       if (this.braid.parameters.num_threads <= 28) {
         this.braid.add_threads(4);
+        this.record_history();
         this.render();
       }
     }.bind(this));
@@ -20,6 +57,7 @@ class VisualizerManager {
     this.controls.remove_threads.addEventListener('click', function() {
       if (this.braid.parameters.num_threads > 4) {
         this.braid.remove_threads(4);
+        this.record_history();
         this.render();
       }
     }.bind(this));
@@ -30,6 +68,7 @@ class VisualizerManager {
       } else if (this.controls.bead_location_bottom.checked) {
         this.braid.set_beads_from_the_bottom(parseInt(this.controls.bead_number.value, 10));
       }
+      this.record_history();
       this.render();
     }.bind(this));
   }
@@ -66,9 +105,9 @@ class VisualizerManager {
     visualizer.destroy();
   }
 
-  render() {
+  render(force) {
     for (var i = 0; i < this.visualizers.length; i++) {
-      this.visualizers[i].render();
+      this.visualizers[i].render(force);
       this.add_listeners(this.visualizers[i]);
     }
   }
@@ -76,6 +115,7 @@ class VisualizerManager {
   add_listeners(visualizer) {
     var update_colour = function(bead_svg) {
       bead_svg.bead.colour = this.controls.bead_colour.value;
+      this.record_history();
       this.render();
     }.bind(this);
 
