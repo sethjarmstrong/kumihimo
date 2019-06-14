@@ -82,7 +82,7 @@ class Braid {
   }
 
   remove_threads(amount) {
-    this.parameters.num_threads = Math.min(this.parameters.num_threads - amount, 0);
+    this.parameters.num_threads = Math.max(this.parameters.num_threads - amount, 0);
 
     while (this.threads.length > this.parameters.num_threads) {
       this.threads.pop();
