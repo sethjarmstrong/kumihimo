@@ -29,7 +29,7 @@
     <div class="layout-wrapper">
       <ul id="menu-container">
         <li>
-          <div><strong>Editing Controls</strong></div>
+          <div><strong>Editing</strong></div>
           <div>
             <button type="button" id="undo">Undo</button>
             <button type="button" id="redo">Redo</button>
@@ -37,7 +37,7 @@
         </li>
 
         <li>
-          <div><strong>Thread Controls</strong></div>
+          <div><strong>Threads</strong></div>
           <div>
             <button type="button" id="remove_threads">Remove Threads</button>
             <button type="button" id="add_threads">Add Threads</button>
@@ -45,7 +45,7 @@
         </li>
 
         <li>
-          <div><strong>Bead Controls</strong></div>
+          <div><strong>Beads</strong></div>
           <div>
             <label for="bead_number">Number of Beads</label>
             <input id="bead_number" type="number" min="1" value="5" />
@@ -58,24 +58,10 @@
             <label for="bead_location_bottom">Add/Remove from the Bottom</label>
             <input name="bead_location" id="bead_location_bottom" type="radio" value="bottom" checked="checked" />
           </div>
-        </li>
 
-        <li>
-          <div>
-            <p><strong>3D Controls</strong></p>
-          </div>
-          <div>
-            <label for="3d_radius">Radius</label>
-            <input id="3d_radius" type="number" min="1" value="2" step="0.05" />
-          </div>
-          <div>
-            <label for="3d_bead_step">Bead Step (degrees)</label>
-            <input id="3d_bead_step" type="number" min="1" value="50" step="1" />
-          </div>
-          <div>
-            <label for="3d_vertical_step">Vertical Step</label>
-            <input id="3d_vertical_step" type="number" min="0" value="0.25" step="0.05" />
-          </div>
+          <input id="3d_radius" type="number" min="1" value="2" step="0.05" class="hidden" />
+          <input id="3d_bead_step" type="number" min="1" value="50" step="1" class="hidden" />
+          <input id="3d_vertical_step" type="number" min="0" value="0.25" step="0.05" class="hidden" />
         </li>
 
         <li>
