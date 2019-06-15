@@ -1,30 +1,13 @@
-class Visualizer {
+class TwoDVisualizer extends Visualizer {
   constructor(braid, element, control_elements) {
-    this.braid = braid;
-    this.element = element;
-    this.control_elements = control_elements;
+    super(braid, element, control_elements);
     this.px_per_bead = 20;
     this.bead_radius = 8;
-    this.bead_svgs = [];
   }
 
   render() {
-    this.clean_element();
-
-    var element = this.element;
-    this.elements().forEach(function(e) {
-      element.appendChild(e);
-    });
-  }
-
-  destroy() {
-    this.clean_element();
-  }
-
-  clean_element() {
-    while (this.element.firstChild) {
-      this.element.removeChild(this.element.firstChild);
-    }
+    this.bead_svgs = [];
+    super.render();
   }
 
   get height() {
