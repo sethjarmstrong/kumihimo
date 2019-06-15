@@ -1,4 +1,4 @@
-class UnbraidedVisualizer extends Visualizer {
+class UnbraidedVisualizer extends TwoDVisualizer {
   get rows() {
     return this.braid.parameters.num_beads + 1;
   }
