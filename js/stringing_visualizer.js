@@ -1,4 +1,4 @@
-class StringingVisualizer extends Visualizer {
+class StringingVisualizer extends TwoDVisualizer {
   elements() {
     var elements = [];
     elements.push(this.totals_element());

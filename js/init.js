@@ -35,11 +35,6 @@
   }
 
   function get_colour_name() {
-    var element = document.getElementById('colour_name');
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
-
     document.getElementById('colour_name').value = get_current_colour().name;
   }
 
@@ -83,6 +78,7 @@
       'bead_location_top',
       'bead_location_bottom',
       'bead_colour',
+      'add_to_palette',
       '3d_radius',
       '3d_bead_step',
       '3d_vertical_step',
@@ -101,6 +97,8 @@
     //braid.load_demo();
 
     var manager = new VisualizerManager(braid, controls);
+    manager.register_visualizer(new PaletteManager(braid, document.getElementById('palette'), controls));
+    manager.render();
 
     var layout = new window.GoldenLayout(config, $('#layout-container'));
 

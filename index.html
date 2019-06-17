@@ -19,10 +19,12 @@
     <script type="application/javascript" src="js/kumihimo.js"></script>
     <script type="application/javascript" src="js/loom.js"></script>
     <script type="application/javascript" src="js/visualizer.js"></script>
+    <script type="application/javascript" src="js/two_d_visualizer.js"></script>
     <script type="application/javascript" src="js/unbraided_visualizer.js"></script>
     <script type="application/javascript" src="js/stringing_visualizer.js"></script>
     <script type="application/javascript" src="js/printable_stringing_visualizer.js"></script>
     <script type="application/javascript" src="js/three_d_visualizer.js"></script>
+    <script type="application/javascript" src="js/palette_manager.js"></script>
     <script type="application/javascript" src="js/visualizer_manager.js"></script>
   </head>
   <body>
@@ -65,15 +67,22 @@
         </li>
 
         <li>
+          <div><strong>Colour</strong></div>
           <div>
             <label for="bead_colour">Bead Colour</label>
             <input id="bead_colour" type="color" value="#ffffff" />
+            <button type="button" id="add_to_palette">Add to Palette</button>
           </div>
           <div>
             <label for="colour_name" class="left">Colour Name</label>
             <input id="colour_name" type="text" />
             <button type="button" id="save_colour_name">Save</button>
           </div>
+        </li>
+
+        <li>
+          <div><strong>Palette</strong></div>
+          <div id="palette"></div>
         </li>
       </ul>
 
