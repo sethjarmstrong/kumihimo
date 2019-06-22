@@ -67,6 +67,17 @@
     });
   }
 
+  function init_save_load_controls(manager) {
+    document.getElementById('save_braid').addEventListener('click', function() {
+      window.alert(manager.braid.serialize());
+    });
+
+    document.getElementById('load_braid').addEventListener('click', function() {
+      manager.braid.deserialize(document.getElementById('load_string').value);
+      manager.render(true);
+    });
+  }
+
   function init() {
     var controls = {};
     [
@@ -140,6 +151,7 @@
     add_menu_item('printable-stringing-visualizer', 'Stringing Guide (Names)');
 
     init_colour_picker(manager);
+    init_save_load_controls(manager);
   }
 
   window.addEventListener('load', init);

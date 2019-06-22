@@ -86,6 +86,14 @@ class Braid {
     return other;
   }
 
+  serialize() {
+    return JSON.stringify(this);
+  }
+
+  deserialize(string) {
+    this.copy(JSON.parse(string));
+  }
+
   set_threads(amount) {
     this.remove_threads(this.parameters.num_threads);
     this.add_threads(amount);
