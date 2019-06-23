@@ -134,7 +134,7 @@ class VisualizerManager {
         if (event.buttons & 1 === 1) { update_colour(event, bead_svg); }
       });
 
-      bead_svg.element.addEventListener('click', function() { update_colour(event, bead_svg); });
+      bead_svg.element.addEventListener('click', function(event) { update_colour(event, bead_svg); });
     });
   }
 }
