@@ -69,12 +69,27 @@
 
   function init_save_load_controls(manager) {
     document.getElementById('save_braid').addEventListener('click', function() {
-      window.alert(manager.braid.serialize());
+      var link = document.getElementById('save_braid_link');
+      link.href = window.URL.createObjectURL(new Blob([manager.braid.serialize()], { type: 'octet/stream' }));
+      link.target = '_blank';
+      link.download = 'braid.json';
+      link.click();
     });
 
-    document.getElementById('load_braid').addEventListener('click', function() {
-      manager.braid.deserialize(document.getElementById('load_string').value);
-      manager.render(true);
+    document.getElementById('load_braid').addEventListener('click', function(event) {
+      var file_upload = document.getElementById('load_braid_file');
+
+      if (file_upload.value === '') {
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        manager.braid.deserialize(event.target.result);
+        manager.record_history();
+        manager.render(true);
+      };
+      reader.readAsText(file_upload.files[0]);
     });
   }
 
