@@ -69,19 +69,21 @@
 
   function init_save_load_controls(manager) {
     document.getElementById('save_braid').addEventListener('click', function() {
+      var filename = document.getElementById('save_braid_filename').value.trim();
+
+      if (filename === '') { return; }
+
       var link = document.getElementById('save_braid_link');
       link.href = window.URL.createObjectURL(new Blob([manager.braid.serialize()], { type: 'octet/stream' }));
       link.target = '_blank';
-      link.download = 'braid.json';
+      link.download = filename;
       link.click();
     });
 
     document.getElementById('load_braid').addEventListener('click', function(event) {
       var file_upload = document.getElementById('load_braid_file');
 
-      if (file_upload.value === '') {
-        return;
-      }
+      if (file_upload.value.trim() === '') { return; }
 
       var reader = new FileReader();
       reader.onload = function(event) {
