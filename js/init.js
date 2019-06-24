@@ -67,7 +67,7 @@
     });
   }
 
-  function init_save_load_controls(manager) {
+  function init_save_load_controls(manager, palette_manager) {
     document.getElementById('save_braid').addEventListener('click', function() {
       var filename = document.getElementById('save_braid_filename').value.trim();
 
@@ -88,6 +88,7 @@
       var reader = new FileReader();
       reader.onload = function(event) {
         manager.braid.deserialize(event.target.result);
+        palette_manager.load_from_braid();
         manager.record_history();
         manager.render(true);
       };
@@ -125,7 +126,8 @@
     //braid.load_demo();
 
     var manager = new VisualizerManager(braid, controls);
-    manager.register_visualizer(new PaletteManager(braid, document.getElementById('palette'), controls));
+    var palette_manager = new PaletteManager(braid, document.getElementById('palette'), controls);
+    manager.register_visualizer(palette_manager);
     manager.render();
 
     var layout = new window.GoldenLayout(config, $('#layout-container'));
@@ -168,7 +170,7 @@
     add_menu_item('printable-stringing-visualizer', 'Stringing Guide (Names)');
 
     init_colour_picker(manager);
-    init_save_load_controls(manager);
+    init_save_load_controls(manager, palette_manager);
   }
 
   window.addEventListener('load', init);

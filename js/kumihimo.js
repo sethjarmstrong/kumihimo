@@ -144,6 +144,16 @@ class Braid {
     });
   }
 
+  get colours() {
+    var colours = [];
+    this.threads.forEach(function(thread) {
+      thread.beads.forEach(function(bead) {
+        if (colours.indexOf(bead.colour) === -1) { colours.push(bead.colour); }
+      });
+    });
+    return colours;
+  }
+
   load_demo() {
     this.set_threads(12);
     this.set_beads_from_the_bottom(5);

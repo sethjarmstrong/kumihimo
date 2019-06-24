@@ -9,7 +9,7 @@ class PaletteManager extends Visualizer {
   }
 
   add(colour) {
-    if (this.findIndex(colour) === -1) {
+    if (this.find_index(colour) === -1) {
       this.colours.push(new PaletteColour(colour, this, this.set_colour));
       this.sort();
       this.render();
@@ -17,13 +17,20 @@ class PaletteManager extends Visualizer {
   }
 
   remove(colour) {
-    var index = this.findIndex(colour);
+    var index = this.find_index(colour);
     if (index === -1) { return; }
     this.colours.splice(index, 1);
     this.render();
   }
 
-  findIndex(colour) {
+  load_from_braid() {
+    this.colours.length = 0;
+    this.braid.colours.forEach(function(colour) {
+      this.add(colour);
+    }.bind(this));
+  }
+
+  find_index(colour) {
     return this.colours.findIndex(function(element) {
       return element.colour === colour;
     });
