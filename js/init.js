@@ -105,16 +105,22 @@
       var reader = new FileReader();
       reader.onload = function(event) {
         loaded_data = JSON.parse(event.target.result);
-        manager.braid.copy(loaded_data.braid);
 
-        loaded_data.colours.forEach(function(colour) {
-          var matched_colour = get_colour_from_value(colour.rgb);
+        if (loaded_data.braid === undefined) {
+          // Version 1 of save/load
+          manager.braid.copy(loaded_data);
+        } else {
+          manager.braid.copy(loaded_data.braid);
 
-          if (colour.index === -1) { return; }
+          loaded_data.colours.forEach(function(colour) {
+            var matched_colour = get_colour_from_value(colour.rgb);
 
-          matched_colour.name = colour.name;
-          save_colour(matched_colour);
-        });
+            if (colour.index === -1) { return; }
+
+            matched_colour.name = colour.name;
+            save_colour(matched_colour);
+          });
+        }
 
         palette_manager.load_from_braid();
         manager.record_history();
