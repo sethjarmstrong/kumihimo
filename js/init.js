@@ -38,6 +38,19 @@
     document.getElementById('colour_name').value = get_current_colour().name;
   }
 
+  function save_colour(colour) {
+    var matched_colour_entry = ntc.names[colour.index];
+
+    if (colour.exactmatch) {
+      ntc.names[colour.index] = colour.raw;
+      matched_colour_entry[1] = colour.name;
+    } else if (colour.raw[0] < matched_colour_entry[0]) {
+      ntc.names.splice(colour.index, 0, colour.raw);
+    } else {
+      ntc.names.splice(colour.index + 1, 0, colour.raw);
+    }
+  }
+
   function init_colour_picker(manager) {
     document.getElementById('bead_colour').addEventListener('change', get_colour_name);
     get_colour_name();
@@ -51,17 +64,7 @@
 
       var new_colour_name = document.getElementById('colour_name').value;
       colour.name = new_colour_name;
-
-      var matched_colour_entry = ntc.names[colour.index];
-
-      if (colour.exactmatch) {
-        ntc.names[colour.index] = colour.raw;
-        matched_colour_entry[1] = new_colour_name;
-      } else if (colour.raw[0] < matched_colour_entry[0]) {
-        ntc.names.splice(colour.index, 0, colour.raw);
-      } else {
-        ntc.names.splice(colour.index + 1, 0, colour.raw);
-      }
+      save_colour(colour);
 
       manager.render();
     });
