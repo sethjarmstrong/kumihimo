@@ -28,10 +28,21 @@
   };
 
   function get_current_colour() {
-    var colour_value = document.getElementById('bead_colour').value;
+    return get_colour_from_value(document.getElementById('bead_colour').value);
+  }
+
+  function get_colour_from_value(colour_value) {
     var colour = ntc.name(colour_value);
-    colour.rgb = document.getElementById('bead_colour').value.toUpperCase();
+    colour.rgb = colour_value.toUpperCase();
     return colour;
+  }
+
+  function get_colours_from_values(colour_values) {
+    var colours = [];
+    colour_values.forEach(function(colour_value) {
+      colours.push(get_colour_from_value(colour_value));
+    });
+    return colours;
   }
 
   function get_colour_name() {
@@ -58,9 +69,7 @@
     document.getElementById('save_colour_name').addEventListener('click', function() {
       var colour = get_current_colour();
 
-      if (colour.index === -1) {
-        return;
-      }
+      if (colour.index === -1) { return; }
 
       var new_colour_name = document.getElementById('colour_name').value;
       colour.name = new_colour_name;
@@ -77,7 +86,12 @@
       if (filename === '') { return; }
 
       var link = document.getElementById('save_braid_link');
-      link.href = window.URL.createObjectURL(new Blob([manager.braid.serialize()], { type: 'octet/stream' }));
+      link.href = window.URL.createObjectURL(
+        new Blob(
+          [JSON.stringify({ braid: manager.braid, colours: get_colours_from_values(manager.braid.colours) })],
+          { type: 'octet/stream' }
+        )
+      );
       link.target = '_blank';
       link.download = filename;
       link.click();
@@ -90,7 +104,18 @@
 
       var reader = new FileReader();
       reader.onload = function(event) {
-        manager.braid.deserialize(event.target.result);
+        loaded_data = JSON.parse(event.target.result);
+        manager.braid.copy(loaded_data.braid);
+
+        loaded_data.colours.forEach(function(colour) {
+          var matched_colour = get_colour_from_value(colour.rgb);
+
+          if (colour.index === -1) { return; }
+
+          matched_colour.name = colour.name;
+          save_colour(matched_colour);
+        });
+
         palette_manager.load_from_braid();
         manager.record_history();
         manager.render(true);
