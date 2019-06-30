@@ -123,6 +123,7 @@
         }
 
         palette_manager.load_from_braid();
+        get_colour_name();
         manager.record_history();
         manager.render(true);
       };
