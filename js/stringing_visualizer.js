@@ -43,6 +43,12 @@ class StringingVisualizer extends TwoDVisualizer {
     return colour_descriptor;
   }
 
+  create_colour_descriptors(container, colours) {
+    for (var i = 0; i < colours.length; i++) {
+      container.appendChild(this.create_colour_descriptor(colours[i], i === colours.length - 1));
+    }
+  }
+
   totals_element() {
     function pluralize(string, amount) {
       return (Math.abs(amount) > 1 ? string + 's' : string);
@@ -77,9 +83,7 @@ class StringingVisualizer extends TwoDVisualizer {
     var container = this.create_container(number);
     var colours = this.group_colours(thread);
 
-    for (var i = 0; i < colours.length; i++) {
-      container.appendChild(this.create_colour_descriptor(colours[i], i === colours.length - 1));
-    }
+    this.create_colour_descriptors(container, colours);
 
     return container;
   }
