@@ -100,7 +100,12 @@ class ThreeDVisualizer extends Visualizer {
 
   colour_render() {
     this.beads.forEach(function(bead) {
-      bead.mesh.material.color.set(bead.bead.colour);
+      var material = bead.mesh.material;
+      material.color.set(bead.bead.colour);
+      material.metalness = bead.bead.metalness;
+      material.roughness = bead.bead.roughness;
+      material.clearCoat = bead.bead.clearCoat;
+      material.clearCoatRoughness = bead.bead.clearCoatRoughness;
     });
   }
 
@@ -156,7 +161,13 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   bead(bead, x, y, z) {
-    var material = new THREE.MeshBasicMaterial({ color: bead.colour });
+    var material = new THREE.MeshPhysicalMaterial({
+      color: bead.colour,
+      metalness: bead.metalness,
+      roughness: bead.roughness,
+      clearCoat: bead.clearCoat,
+      clearCoatRoughness: bead.clearCoatRoughness
+    });
     var mesh = new THREE.Mesh(this.geometry, material);
     mesh.position.set(x, y, z);
     mesh.bead = bead;
@@ -366,7 +377,12 @@ class ThreeDControls {
         if (event.shiftKey) {
           this.visualizer.braid.set_all_beads_of_colour_to(intersects[0].object.bead.colour, this.colour);
         } else {
-          intersects[0].object.bead.colour = this.colour;
+          var bead = intersects[0].object.bead;
+          bead.colour = this.colour;
+          bead.metalness = this.metalness;
+          bead.roughness = this.roughness;
+          bead.clearCoat = this.clearCoat;
+          bead.clearCoatRoughness = this.clearCoatRoughness;
         }
         this.visualizer.manager.record_history();
         this.visualizer.manager.render();
@@ -388,4 +404,8 @@ class ThreeDControls {
   get pan_step() { return this.visualizer.pan_step; }
 
   get colour() { return this.visualizer.control_elements.bead_colour.value; }
+  get metalness() { return parseInt(this.visualizer.control_elements.metalness.value, 10) / 100; }
+  get roughness() { return parseInt(this.visualizer.control_elements.roughness.value, 10) / 100; }
+  get clearCoat() { return parseInt(this.visualizer.control_elements.clearCoat.value, 10) / 100; }
+  get clearCoatRoughness() { return parseInt(this.visualizer.control_elements.clearCoatRoughness.value, 10) / 100; }
 }

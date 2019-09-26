@@ -1,6 +1,10 @@
 class Bead {
-  constructor(colour = '#ffffff') {
+  constructor(colour = '#ffffff', metalness = 0, roughness = 0, clearCoat = 0, clearCoatRoughness = 0) {
     this.colour = colour;
+    this.metalness = metalness;
+    this.roughness = roughness;
+    this.clearCoat = clearCoat;
+    this.clearCoatRoughness = clearCoatRoughness;
   }
 }
 
@@ -70,6 +74,10 @@ class Braid {
     for (var i = 0; i < this.threads.length; i++) {
       for (var j = 0; j < this.threads[i].beads.length; j++) {
         this.threads[i].beads[j].colour = other.threads[i].beads[j].colour;
+        this.threads[i].beads[j].metalness = other.threads[i].beads[j].metalness;
+        this.threads[i].beads[j].roughness = other.threads[i].beads[j].roughness;
+        this.threads[i].beads[j].clearCoat = other.threads[i].beads[j].clearCoat;
+        this.threads[i].beads[j].clearCoatRoughness = other.threads[i].beads[j].clearCoatRoughness;
       }
     }
   }

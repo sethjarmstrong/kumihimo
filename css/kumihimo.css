@@ -143,3 +143,12 @@ body .lm_content {
     grid-row-start: 3;
     margin: auto;
 }
+
+.slider-controls {
+    display: flex;
+    justify-content: space-between;
+}
+
+.slider-controls label {
+    flex-basis: 10.5em;
+}
