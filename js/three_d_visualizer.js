@@ -73,7 +73,6 @@ class ThreeDVisualizer extends Visualizer {
       var bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      this.scene.add(bead.outline_mesh);
       y -= this.vertical_step;
     }
 
@@ -84,7 +83,6 @@ class ThreeDVisualizer extends Visualizer {
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
-      this.scene.add(bead.outline_mesh);
       y -= this.vertical_step;
     }
 
@@ -133,7 +131,6 @@ class ThreeDVisualizer extends Visualizer {
     while(this.beads.length !== 0) {
       var bead_to_remove = this.beads.pop();
       this.scene.remove(bead_to_remove.mesh);
-      this.scene.remove(bead_to_remove.outline_mesh);
     }
   }
 
@@ -171,15 +168,7 @@ class ThreeDVisualizer extends Visualizer {
     var mesh = new THREE.Mesh(this.geometry, material);
     mesh.position.set(x, y, z);
     mesh.bead = bead;
-    return { bead: bead, mesh: mesh, outline_mesh: this.create_outline(mesh) };
-  }
-
-  create_outline(mesh) {
-    var outline_material = new THREE.MeshBasicMaterial({ color: 0, side: THREE.BackSide });
-    var outline_mesh = new THREE.Mesh(this.geometry, outline_material);
-    outline_mesh.position.copy(mesh.position);
-    outline_mesh.scale.multiplyScalar(1.05);
-    return outline_mesh;
+    return { bead: bead, mesh: mesh };
   }
 
   setScene() {
