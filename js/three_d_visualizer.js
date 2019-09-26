@@ -146,6 +146,7 @@ class ThreeDVisualizer extends Visualizer {
     this.scene = null;
     this.camera = null;
     this.light = null;
+    this.ambient_light = null;
     this.renderer = null;
 
     this.controls.destroy();
@@ -215,6 +216,9 @@ class ThreeDVisualizer extends Visualizer {
     this.light = new THREE.PointLight(0xffffff, 1.2);
     this.light.position.set(this.camera.position.x + 3, this.camera.position.y + 3, this.camera.position.z + 3);
     this.scene.add(this.light);
+
+    this.ambient_light = new THREE.AmbientLight(0xffffff, 0.15);
+    this.scene.add(this.ambient_light);
   }
 
   _create_renderer() {
