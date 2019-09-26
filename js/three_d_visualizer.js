@@ -213,7 +213,7 @@ class ThreeDVisualizer extends Visualizer {
 
   _create_light() {
     this.light = new THREE.PointLight(0xffffff, 1.2);
-    this.light.position.copy(this.camera.position);
+    this.light.position.set(this.camera.position.x + 3, this.camera.position.y + 3, this.camera.position.z + 3);
     this.scene.add(this.light);
   }
 
@@ -320,8 +320,8 @@ class ThreeDControls {
       var x = this.radius * Math.cos(this.rotation_angle);
       var z = this.radius * Math.sin(this.rotation_angle);
       this.camera.position.set(x, this.camera.position.y, z);
+      this.visualizer.light.position.set(x + 3, this.camera.position.y + 3, z + 3);
       this.camera.lookAt(0, this.camera.position.y, 0);
-      this.visualizer.light.position.copy(this.camera.position);
     }.bind(this);
   }
   rotate_left() { return this.rotate(this.rotation_step); }
@@ -332,7 +332,7 @@ class ThreeDControls {
       var v = new THREE.Vector3(0, amount, 0);
       v.multiplyScalar(this.pan_step);
       this.camera.position.add(v);
-      this.visualizer.light.position.copy(this.camera.position);
+      this.visualizer.light.position.add(v);
     }.bind(this);
   }
   pan_up() { return this.pan(1); }
@@ -344,7 +344,6 @@ class ThreeDControls {
       this.radius = Math.max(this.radius, 10);
       this.radius = Math.min(this.radius, this.visualizer.camera_radius * 2);
       this.rotate(0)();
-      this.visualizer.light.position.copy(this.camera.position);
     }.bind(this);
   }
   zoom_in() { return this.zoom(-5); }
