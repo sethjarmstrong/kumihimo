@@ -11,12 +11,6 @@ class Thread {
     this.set_beads_from_the_bottom(num_beads);
   }
 
-  change_colour(colour) {
-    this.beads.forEach(function(bead) {
-      bead.colour = colour;
-    });
-  }
-
   next_bead() {
     if (this.current_bead == this.beads.length) {
       return null;
