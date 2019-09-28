@@ -143,7 +143,6 @@ class ThreeDVisualizer extends Visualizer {
     this.beads = null;
     this.scene = null;
     this.camera = null;
-    this.light = null;
     this.renderer = null;
 
     this.controls.destroy();
@@ -179,7 +178,6 @@ class ThreeDVisualizer extends Visualizer {
     this._set_visualization_size();
     this._create_scene();
     this._create_camera();
-    this._create_light();
     this._create_renderer();
     this._create_controls();
     this._create_geometry();
@@ -209,11 +207,6 @@ class ThreeDVisualizer extends Visualizer {
     this.camera = new THREE.PerspectiveCamera(75, this.viewport_size.width / this.viewport_size.height, 0.1, 1000);
     this.camera.position.set(this.camera_radius, 0, 0);
     this.camera.lookAt(0, 0, 0);
-  }
-
-  _create_light() {
-    this.light = new THREE.PointLight(0xffffff, 0.8);
-    this.camera.add(this.light);
   }
 
   _create_renderer() {
