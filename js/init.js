@@ -131,12 +131,6 @@
     });
   }
 
-  function init_material_control(control_element, display_element) {
-    control_element.addEventListener('input', function() {
-      display_element.innerHTML = (parseInt(control_element.value, 10) / 100).toFixed(2);
-    });
-  }
-
   function init() {
     var controls = {};
     [
@@ -152,10 +146,6 @@
       '3d_radius',
       '3d_bead_step',
       '3d_vertical_step',
-      'metalness',
-      'roughness',
-      'clearCoat',
-      'clearCoatRoughness',
     ].forEach(function(id) { controls[id] = document.getElementById(id); });
 
     var parameters = {
@@ -216,11 +206,6 @@
 
     init_colour_picker(manager);
     init_save_load_controls(manager, palette_manager);
-
-    init_material_control(controls.metalness, document.getElementById('metalness_display'));
-    init_material_control(controls.roughness, document.getElementById('roughness_display'));
-    init_material_control(controls.clearCoat, document.getElementById('clearCoat_display'));
-    init_material_control(controls.clearCoatRoughness, document.getElementById('clearCoatRoughness_display'));
   }
 
   window.addEventListener('load', init);

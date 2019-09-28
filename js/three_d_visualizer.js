@@ -73,6 +73,7 @@ class ThreeDVisualizer extends Visualizer {
       var bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
+      this.scene.add(bead.outline_mesh);
       y -= this.vertical_step;
     }
 
@@ -83,6 +84,7 @@ class ThreeDVisualizer extends Visualizer {
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
+      this.scene.add(bead.outline_mesh);
       y -= this.vertical_step;
     }
 
@@ -98,12 +100,7 @@ class ThreeDVisualizer extends Visualizer {
 
   colour_render() {
     this.beads.forEach(function(bead) {
-      var material = bead.mesh.material;
-      material.color.set(bead.bead.colour);
-      material.metalness = bead.bead.metalness;
-      material.roughness = bead.bead.roughness;
-      material.clearCoat = bead.bead.clearCoat;
-      material.clearCoatRoughness = bead.bead.clearCoatRoughness;
+      bead.mesh.material.color.set(bead.bead.colour);
     });
   }
 
@@ -131,6 +128,7 @@ class ThreeDVisualizer extends Visualizer {
     while(this.beads.length !== 0) {
       var bead_to_remove = this.beads.pop();
       this.scene.remove(bead_to_remove.mesh);
+      this.scene.remove(bead_to_remove.outline_mesh);
     }
   }
 
@@ -146,7 +144,6 @@ class ThreeDVisualizer extends Visualizer {
     this.scene = null;
     this.camera = null;
     this.light = null;
-    this.ambient_light = null;
     this.renderer = null;
 
     this.controls.destroy();
@@ -159,17 +156,19 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   bead(bead, x, y, z) {
-    var material = new THREE.MeshPhysicalMaterial({
-      color: bead.colour,
-      metalness: bead.metalness,
-      roughness: bead.roughness,
-      clearCoat: bead.clearCoat,
-      clearCoatRoughness: bead.clearCoatRoughness
-    });
+    var material = new THREE.MeshBasicMaterial({ color: bead.colour });
     var mesh = new THREE.Mesh(this.geometry, material);
     mesh.position.set(x, y, z);
     mesh.bead = bead;
-    return { bead: bead, mesh: mesh };
+    return { bead: bead, mesh: mesh, outline_mesh: this.create_outline(mesh) };
+  }
+
+  create_outline(mesh) {
+    var outline_material = new THREE.MeshBasicMaterial({ color: 0, side: THREE.BackSide });
+    var outline_mesh = new THREE.Mesh(this.geometry, outline_material);
+    outline_mesh.position.copy(mesh.position);
+    outline_mesh.scale.multiplyScalar(1.05);
+    return outline_mesh;
   }
 
   setScene() {
@@ -213,12 +212,8 @@ class ThreeDVisualizer extends Visualizer {
   }
 
   _create_light() {
-    this.light = new THREE.PointLight(0xffffff, 1.2);
-    this.light.position.set(this.camera.position.x + 3, this.camera.position.y + 3, this.camera.position.z + 3);
-    this.scene.add(this.light);
-
-    this.ambient_light = new THREE.AmbientLight(0xffffff, 0.15);
-    this.scene.add(this.ambient_light);
+    this.light = new THREE.PointLight(0xffffff, 0.8);
+    this.camera.add(this.light);
   }
 
   _create_renderer() {
@@ -324,7 +319,6 @@ class ThreeDControls {
       var x = this.radius * Math.cos(this.rotation_angle);
       var z = this.radius * Math.sin(this.rotation_angle);
       this.camera.position.set(x, this.camera.position.y, z);
-      this.visualizer.light.position.set(x + 3, this.camera.position.y + 3, z + 3);
       this.camera.lookAt(0, this.camera.position.y, 0);
     }.bind(this);
   }
@@ -336,7 +330,6 @@ class ThreeDControls {
       var v = new THREE.Vector3(0, amount, 0);
       v.multiplyScalar(this.pan_step);
       this.camera.position.add(v);
-      this.visualizer.light.position.add(v);
     }.bind(this);
   }
   pan_up() { return this.pan(1); }
@@ -369,12 +362,7 @@ class ThreeDControls {
         if (event.shiftKey) {
           this.visualizer.braid.set_all_beads_of_colour_to(intersects[0].object.bead.colour, this.colour);
         } else {
-          var bead = intersects[0].object.bead;
-          bead.colour = this.colour;
-          bead.metalness = this.metalness;
-          bead.roughness = this.roughness;
-          bead.clearCoat = this.clearCoat;
-          bead.clearCoatRoughness = this.clearCoatRoughness;
+          intersects[0].object.bead.colour = this.colour;
         }
         this.visualizer.manager.record_history();
         this.visualizer.manager.render();
@@ -396,8 +384,4 @@ class ThreeDControls {
   get pan_step() { return this.visualizer.pan_step; }
 
   get colour() { return this.visualizer.control_elements.bead_colour.value; }
-  get metalness() { return parseInt(this.visualizer.control_elements.metalness.value, 10) / 100; }
-  get roughness() { return parseInt(this.visualizer.control_elements.roughness.value, 10) / 100; }
-  get clearCoat() { return parseInt(this.visualizer.control_elements.clearCoat.value, 10) / 100; }
-  get clearCoatRoughness() { return parseInt(this.visualizer.control_elements.clearCoatRoughness.value, 10) / 100; }
 }
