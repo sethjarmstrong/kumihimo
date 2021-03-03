@@ -124,6 +124,7 @@
 
         palette_manager.load_from_braid();
         get_colour_name();
+        manager.controls.bead_number.value = manager.braid.parameters.num_beads;
         manager.record_history();
         manager.render(true);
       };
