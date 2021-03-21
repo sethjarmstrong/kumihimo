@@ -180,6 +180,7 @@
     }
 
     layout.registerComponent('3d-braided-visualizer', registration_function(ThreeDVisualizer));
+    layout.registerComponent('3d-flat-visualizer', registration_function(ThreeDFlatVisualizer));
     layout.registerComponent('unbraided-visualizer', registration_function(UnbraidedVisualizer));
     layout.registerComponent('stringing-visualizer', registration_function(StringingVisualizer));
     layout.registerComponent('printable-stringing-visualizer', registration_function(PrintableStringingVisualizer));
@@ -201,6 +202,7 @@
     };
 
     add_menu_item('3d-braided-visualizer', '3D Braided View');
+    add_menu_item('3d-flat-visualizer', '3D Flat View');
     add_menu_item('unbraided-visualizer', 'Unbraided View');
     add_menu_item('stringing-visualizer', 'Stringing Guide (Colours)');
     add_menu_item('printable-stringing-visualizer', 'Stringing Guide (Names)');

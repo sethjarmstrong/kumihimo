@@ -60,17 +60,17 @@ class ThreeDVisualizer extends Visualizer {
     this.loom.weave();
     this.remove_beads_from_scene();
 
-    var xorigin = 0;
-    var zorigin = 0;
-    var y = 0;
+    let y = 0, x = 0, z = 0;
 
-    var positives = this.spirals.positives;
-    var negatives = this.spirals.negatives;
+    let bead = undefined;
+
+    let positives = this.spirals.positives;
+    let negatives = this.spirals.negatives;
 
     for (var i = 0; i < positives.length; i++) {
-      var x = xorigin - this.radius * Math.cos(this.bead_angle(i));
-      var z = zorigin - this.radius * Math.sin(this.bead_angle(i));
-      var bead = this.bead(positives[i], x, y, z);
+      x = -this.radius * Math.cos(this.bead_angle(i));
+      z = -this.radius * Math.sin(this.bead_angle(i));
+      bead = this.bead(positives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
       this.scene.add(bead.outline_mesh);
@@ -79,8 +79,8 @@ class ThreeDVisualizer extends Visualizer {
 
     y = 0;
     for (var i = 0; i < negatives.length; i++) {
-      x = xorigin + this.radius * Math.cos(this.bead_angle(i));
-      z = zorigin + this.radius * Math.sin(this.bead_angle(i));
+      x = this.radius * Math.cos(this.bead_angle(i));
+      z = this.radius * Math.sin(this.bead_angle(i));
       bead = this.bead(negatives[i], x, y, z);
       this.beads.push(bead);
       this.scene.add(bead.mesh);
@@ -140,18 +140,20 @@ class ThreeDVisualizer extends Visualizer {
     cancelAnimationFrame(this.id);
     this.remove_beads_from_scene();
 
+    this.controls.destroy();
+
     this.beads = null;
     this.scene = null;
     this.camera = null;
     this.renderer = null;
 
-    this.controls.destroy();
     super.destroy();
   }
 
   bead_angle(bead_number) {
+    // In radians
     var bead_step = this.braid.three_d_parameters.bead_step;
-    return -2 * Math.PI * bead_step * bead_number / 360;
+    return (-2 * Math.PI * bead_step * bead_number / 360) % (2 * Math.PI);
   }
 
   bead(bead, x, y, z) {
@@ -247,7 +249,11 @@ class ThreeDVisualizer extends Visualizer {
     buttons_container.appendChild(this.zoom_in_button);
     buttons_container.appendChild(this.zoom_out_button);
     this.element.appendChild(buttons_container);
-    this.controls = new ThreeDControls(this);
+    this.controls = this._controls_class();
+  }
+
+  _controls_class() {
+    return new ThreeDControls(this);
   }
 
   _create_geometry() {
@@ -303,7 +309,7 @@ class ThreeDControls {
     this.visualizer.down_button.removeEventListener('click', this.functions.pan_down);
     this.visualizer.zoom_in_button.removeEventListener('click', this.functions.zoom_in);
     this.visualizer.zoom_out_button.removeEventListener('click', this.functions.zoom_out);
-    visualizer.renderer.domElement.removeEventListener('click', this.functions.draw);
+    this.visualizer.renderer.domElement.removeEventListener('click', this.functions.draw);
   }
 
   rotate(amount) {
