@@ -55,6 +55,7 @@ class ThreeDFlatVisualizer extends ThreeDVisualizer {
     }
 
     this.cached_parameters = this.all_parameters;
+    this.braid.calculate_neighbours();
   }
 
   _create_camera() {

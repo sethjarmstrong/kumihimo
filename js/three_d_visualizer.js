@@ -89,6 +89,7 @@ class ThreeDVisualizer extends Visualizer {
     }
 
     this.cached_parameters = this.all_parameters;
+    this.braid.calculate_neighbours();
   }
 
   resize() {
@@ -160,6 +161,7 @@ class ThreeDVisualizer extends Visualizer {
     var material = new THREE.MeshBasicMaterial({ color: bead.colour });
     var mesh = new THREE.Mesh(this.geometry, material);
     mesh.position.set(x, y, z);
+    bead.position = mesh.position;
     mesh.bead = bead;
     return { bead: bead, mesh: mesh, outline_mesh: this.create_outline(mesh) };
   }
@@ -346,8 +348,8 @@ class ThreeDControls {
   zoom_out() { return this.zoom(5); }
 
   draw() {
-    var raycaster = new THREE.Raycaster();
-    var mouse_position = new THREE.Vector2();
+    let raycaster = new THREE.Raycaster();
+    let mouse_position = new THREE.Vector2();
 
     return function(event) {
       mouse_position.x = (event.offsetX / this.visualizer.viewport_size.width) * 2 - 1;
@@ -358,11 +360,20 @@ class ThreeDControls {
       var intersects = raycaster.intersectObjects(this.visualizer.scene.children);
 
       if (intersects.length > 0) {
-        if (event.shiftKey) {
-          this.visualizer.braid.set_all_beads_of_colour_to(intersects[0].object.bead.colour, this.colour);
-        } else {
-          intersects[0].object.bead.colour = this.colour;
+        let bead = intersects[0].object.bead;
+
+        if (!bead) {
+          return;
         }
+
+        if (event.shiftKey) {
+          this.visualizer.braid.set_all_beads_of_colour_to(bead.colour, this.colour);
+        } else if (event.altKey) {
+          bead.patch().forEach(neighbour => neighbour.colour = this.colour);
+        } else {
+          bead.colour = this.colour;
+        }
+
         this.visualizer.manager.record_history();
         this.visualizer.manager.render();
       }

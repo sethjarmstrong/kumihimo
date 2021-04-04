@@ -1,6 +1,19 @@
 class Bead {
   constructor(colour = '#ffffff') {
     this.colour = colour;
+    this.position = null;
+    this.neighbours = [];
+  }
+
+  patch(beads = []) {
+    if (!beads.includes(this)) {
+      beads.push(this);
+      this.neighbours
+        .filter(bead => bead.colour === this.colour)
+        .forEach(bead => bead.patch(beads));
+    }
+
+    return beads;
   }
 }
 
@@ -86,6 +99,7 @@ class Braid {
   }
 
   add_threads(amount) {
+    this.beads.forEach(bead => bead.neighbours = []);
     this.parameters.num_threads += amount;
 
     while (this.threads.length < this.parameters.num_threads) {
@@ -94,6 +108,7 @@ class Braid {
   }
 
   remove_threads(amount) {
+    this.beads.forEach(bead => bead.neighbours = []);
     this.parameters.num_threads = Math.max(this.parameters.num_threads - amount, 0);
 
     while (this.threads.length > this.parameters.num_threads) {
@@ -102,6 +117,7 @@ class Braid {
   }
 
   set_beads(amount, method) {
+    this.beads.forEach(bead => bead.neighbours = []);
     this.parameters.num_beads = amount;
     for (var i = 0; i < this.parameters.num_threads; i++) {
       method.call(this.threads[i], amount);
@@ -138,6 +154,24 @@ class Braid {
       });
     });
     return colours;
+  }
+
+  get beads() {
+    return this.threads.map(thread => thread.beads).flat();
+  }
+
+  calculate_neighbours() {
+    let current_beads = this.beads;
+
+    if (current_beads.every(bead => bead.neighbours.length !== 0) || current_beads.some(bead => bead.position === null)) {
+      return;
+    }
+
+    let max_distance = this.three_d_parameters.radius * 1.1;
+
+    current_beads.forEach(current_bead => {
+      current_bead.neighbours = current_beads.filter(bead => bead !== current_bead && bead.position.distanceTo(current_bead.position) <= max_distance);
+    });
   }
 
   load_demo() {
